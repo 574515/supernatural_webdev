@@ -1,0 +1,59 @@
+<div class="col-12 col-lg-6 col-xl-6 p-3">
+    <a href="{% url 'blog:detail' post.slug %}">
+        <img src="{{ post.image.url }}" id="postImageAccount" class="img-fluid" alt="">
+    </a>
+    <div class="col-12 mt-3 text-center">
+        {% if request.user == currUser or request.user.is_superuser %}
+            <form style="display: inline;" action="{% url 'blog:edit' post.slug %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-outline-warning" type="submit" name="edit" id="btnEdit">
+                    <i class="fa-regular fa-pen-to-square"></i>&nbsp;&nbsp;Edit
+                </button>
+            </form>
+            <form style="display: inline;" action="{% url 'blog:delete' post.slug %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger" type="submit">
+                    <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Delete
+                </button>
+            </form>
+            {% if request.user.is_superuser %}
+                <button class="btn btn-outline-success" type="submit" id="pubUnpubPost-{{ post.id }}">
+                    <i class="fa-regular fa-lemon"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan-{{ post.id }}">Publish</span>
+                </button>                
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+<div class="col-12 col-lg-6 col-xl-6 p-2">
+    <div class="row">
+        <div class="col-md-12 my-2 text-center">
+            <a href="{% url 'blog:detail' post.slug %}" class="h3 accountPostTitle">
+                {{ post.title|truncatechars:18 }}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 ps-md-0 ps-3">
+            <h4 class="text-md-start text-center">Description</h4>
+        </div>
+        <div class="col-6 text-md-end px-md-3 mt-1">
+            {{ post.likes }}&nbsp;<span style="color: red;"><i class="fa-solid fa-heart"></i></span>
+            <span class="text-white">
+                {% if request.user.is_superuser %} {{ post.count_all_comments }} {% else %} {{ post.count_approved }} {% endif %}
+            </span>
+            <span style="color: blue"><i class="fa-solid fa-comments"></i></span>
+        </div>
+        <div class="col-md-12">
+            <p class="text-justify p-2 me-3" id="accountDesc">{{ post.description }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-md-start text-center pt-3">
+            <p>
+                Posted on: <span class="text-muted">{{ post.pub_date }}</span><br>
+                Updated on: <span class="text-muted">{{ post.upd_date }}</span><br>
+                <span class="text-danger" id="isPublishedSpan-{{ post.id }}">* Not published</span>
+            </p>
+        </div>
+    </div>
+</div>

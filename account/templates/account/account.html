@@ -1,0 +1,194 @@
+{% extends 'main/base.html' %}
+{% load static %}
+<head>
+    <title>{% block title %}{{ currUser.username }}'s profile{% endblock %}</title>
+</head>
+{% block content %}
+{% if request.user == currUser or request.user.is_superuser %}
+<div class="container py-3 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-12 col-lg-9 col-xl-9">
+            <ul class="nav nav-tabs unselectable" id="profileTab" role="tablist">
+                <li class="nav-item ml-3 pr-1" role="presentation">
+                    <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab" aria-controls="posts" aria-selected="true">Posts</button>
+                </li>
+                <li class="nav-item pr-1" role="presentation">
+                    <button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments" type="button" role="tab" aria-controls="comments" aria-selected="false">Comments</button>
+                </li>
+                {% if request.user == currUser %}
+                <li class="nav-item pr-1" role="presentation">
+                    <button class="nav-link" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="false">Account</button>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane p-3 active unselectable" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                    {% if blog_posts %}
+                        <div class="row text-center text-md-end px-3">
+                            <form style="display: inline;" action="{% url 'blog:create' %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-light btn-sm" type="submit" name="edit" id="btnEdit">
+                                    <i class="fa-solid fa-mug-hot"></i>&nbsp;&nbsp;Make New Post
+                                </button>
+                            </form>
+                            <div class="col-6 p-2 d-md-none text-center">
+                                <button class="btn btn-outline-success btn-sm w-100" id="togglePublished">Published</button>
+                            </div>
+                            <div class="col-6 p-2 d-md-none text-center">
+                                <button class="btn btn-outline-danger btn-sm w-100" id="toggleUnpublished">Unpublished</button>
+                            </div>
+                        </div>
+                        <!-- ! AJAX -->
+                            <script>let postStates = {}, posts = {}, getState = "False", pubState, postsPubTexts = {};</script>
+                        <!-- ! AJAX -->
+                        {% for post in blog_posts %}
+                            <div class="row m-2 postAccountUnpublished justify-content-between align-items-center text-white d-md-flex d-none" id="post-{{post.id}}">
+                                {% include './snippets/account_post.html' %}
+                            </div>
+                            <!-- ! AJAX -->
+                            <script>
+                                posts["{{ post.slug }}"] = $("#post-{{ post.id }}");
+                                postsPubTexts["{{ post.slug }}"] = $("#isPublishedSpan-{{ post.id }}");
+
+                                getState = "{{ post.published }}";
+                                getState == "True" ? pubState = true : pubState = false;
+                                postStates["{{ post.slug }}"] = pubState;
+                                $("#pubUnpubPostSpan-{{ post.id }}").html(postStates["{{ post.slug }}"] == true ? "Unpublish" : "Publish");
+
+                                if (postStates["{{ post.slug }}"] == true) {
+                                    posts["{{ post.slug }}"].addClass("postAccountPublished").removeClass("postAccountUnpublished");
+                                    postsPubTexts["{{ post.slug }}"].addClass("d-none");
+                                    $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-danger").removeClass("btn-outline-success");
+                                }
+                                else {
+                                    posts["{{ post.slug }}"].addClass("postAccountUnpublished").removeClass("postAccountPublished");
+                                    postsPubTexts["{{ post.slug }}"].removeClass("d-none");
+                                    $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-success").removeClass("btn-outline-danger");
+                                }
+
+                                $("#pubUnpubPost-{{ post.id }}").click(function(e) {
+                                    $.ajax({
+                                        url: "{% url 'blog:publish' post.slug %}",
+                                        type: "GET",
+                                        data: {},
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function() {
+                                            postStates["{{ post.slug }}"] = !postStates["{{ post.slug }}"];
+                                            $("#pubUnpubPostSpan-{{ post.id }}").html(postStates["{{ post.slug }}"] == true ? "Unpublish" : "Publish");
+                                            if (postStates["{{ post.slug }}"] == true) {
+                                                posts["{{ post.slug }}"].addClass("postAccountPublished").removeClass("postAccountUnpublished");
+                                                postsPubTexts["{{ post.slug }}"].addClass("d-none");
+                                                $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-danger").removeClass("btn-outline-success");                                                
+                                            }
+                                            else {                                                    
+                                                posts["{{ post.slug }}"].addClass("postAccountUnpublished").removeClass("postAccountPublished");
+                                                postsPubTexts["{{ post.slug }}"].removeClass("d-none");                                                
+                                                $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-success").removeClass("btn-outline-danger");
+                                            }
+                                        },
+                                        fail: function() {}
+                                    });
+                                });
+                            </script>
+                            <!-- ! AJAX -->
+                        {% endfor %}
+                    {% else %}
+                        <h3 class="text-center">{{ currUser }}, {% if request.user == currUser %}you have no posts.{% else %}has no posts yet.{% endif %}</h3>
+                        {% if request.user == currUser %}
+                        <form class="d-inline" action="{% url 'blog:create' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-light btn-sm mt-3 mb-1" type="submit" name="edit" id="btnEdit">
+                                <i class="fa-solid fa-mug-hot"></i>&nbsp;&nbsp;Make New Post
+                            </button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="tab-pane p-3" id="account" role="tabpanel" aria-labelledby="account-tab">
+                    <div class="col-12 mb-4 unselectable" id="accountEditProfile">
+                        <div class="card-body p-3 p-md-4">
+                            <h4 class="mb-2 pb-md-0 mb-md-5 text-center">Update Account</h3>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-12 col-md-4 my-3">
+                                        <div class="form-outline">
+                                            <label for="first_name" class="text-muted px-1">First name</label>
+                                            <input type="text" name="first_name" class="form-control" id="fname" value="{{ account_form.initial.first_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4 my-3">
+                                        <div class="form-outline">
+                                            <label for="last_name" class="text-muted px-1">Last name</label>
+                                            <input type="text" name="last_name" class="form-control" value="{{ account_form.initial.last_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4 my-3">
+                                        <div class="form-outline">
+                                            <label for="username" class="text-muted px-1">Username</label>
+                                            <input type="text" name="username" class="form-control" value="{{ account_form.initial.username }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-8 my-3">
+                                        <div class="form-outline">
+                                            <label for="email" class="text-muted px-1">Electronic mail</label>
+                                            <input type="email" name="email" class="form-control" value="{{ account_form.initial.email }}">
+                                        </div>
+                                    </div>
+                                    {% include './snippets/userPermissions.html' %}
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 my-2 {% if request.user == currUser %}col-md-4{% else %}col-md-6{% endif %}">
+                                        <button type="button" class="btn btn-outline-warning w-100" id="editProfile">Edit profile</button>
+                                    </div>
+                                    <div class="col-12 my-2 {% if request.user == currUser %}col-md-4{% else %}col-md-6{% endif %}">
+                                        <button type="submit" class="btn btn-outline-success w-100" id="saveChanges">Save changes</button>
+                                    </div>
+                                    {% if request.user == currUser %}
+                                    <div class="col-12 col-md-4 my-2">
+                                        <a class="btn btn-outline-secondary w-100" href="{% url 'account:password_change' %}">Change password</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12 mb-2 text-center py-2 sucess">
+                                    {% if success_message %}{{ success_message }}{% endif %}
+                                </div>
+                                <div class="col-md-12 mb-1 text-center py-2 errors">
+                                    {% for field in account_form %}
+                                        {% for error in field.errors %}<p>{{error}}</p>{% endfor %}
+                                    {% endfor %}
+                                    {% if account_form.non_field_errors %}<p>{{ account_form.non_field_errors }}</p>{% endif %}
+                                </div>
+                            </form>
+                        </div>
+                    </div>                 
+                </div>
+
+                <div class="tab-pane p-3 unselectable" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                    {% if comments %}
+                        <div class="row text-start">
+                            <div class="col-6 p-2 d-md-none text-center">
+                                <button class="btn btn-outline-danger btn-sm w-100" id="toggleUnapproved">Unapproved</button>
+                            </div>
+                            <div class="col-12 col-md-6 mt-3 mt-md-0 d-md-block d-none" id="approvedCommentsDiv">
+                                {% for comment in comments %}
+                                    {% include './snippets/comments.html' %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <h3 class="text-center">{{ currUser }}, {% if request.user == currUser %}you have yet to comment...{% else %}has no comments yet.{% endif %}</h3>
+                    {% endif %}
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+    {% include './snippets/anonymous_otheruser.html' %}
+{% endif %}
+<script src="{% static 'scripts/account.js' %}"></script>
+{% endblock content %}

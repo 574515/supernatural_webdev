@@ -1,0 +1,33 @@
+{% if request.user.is_authenticated %}
+<div class="profileCard unselectable text-left">
+    <div class="row p-3">
+        <div class="col-md-5">First name:</div>
+        <div class="col-md-7 text-muted">{{ request.user.first_name }}</div>
+        <div class="col-md-5 mt-1">Last name:</div>
+        <div class="col-md-7 mt-1 text-muted">{{ request.user.last_name }}</div>
+        <div class="col-md-5 mt-1">Username:</div>
+        <div class="col-md-7 mt-1 text-muted">{{ request.user.username }}</div>
+        <div class="col-md-5 mt-1">Last login:</div>
+        <div class="col-md-7 mt-1 text-muted">{{ request.user.last_login }}</div>
+        <div class="col-md-6 mt-3 mb-1 text-center">
+            <a href="{% url 'account:profile' request.user.id %}" class="btn btn-outline-warning btn-sm"><i class="fa-solid fa-hotdog"></i>&nbsp;&nbsp;Profile</a>
+        </div>
+        <div class="col-md-6 mt-3 mb-1 text-center">
+            <a href="{% url 'account:logout' %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-drumstick-bite"></i>&nbsp;&nbsp;Logout</a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="profileCard unselectable text-center text-info">
+    <div class="row p-2">
+        <div class="col-md-4 mt-1">Users:<p class="text-muted">{{ users.count }}</p></div>
+        <div class="col-md-4 mt-1">Comments:<p class="text-muted">{{ comments.count }}</p></div>
+        <div class="col-md-4 mt-1">Posts:<p class="text-muted">{{ pub_posts.count }}</p></div>
+        <div class="col-md-12 mb-1">
+            Want to improve statistics?
+            <a href="{% url 'account:login' %}" class="btn btn-outline-info btn-block my-2"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Log in</a>
+            <a href="{% url 'account:register' %}" class="btn btn-outline-info btn-block my-2"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Sign Up</a>
+        </div>
+    </div>
+</div>
+{% endif %}

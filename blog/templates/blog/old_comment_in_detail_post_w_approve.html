@@ -1,0 +1,73 @@
+<div class="col-12 col-md-5 mt-3 mt-md-0 d-md-block d-none" id="postComments">
+    <div class="commentsBody">
+        <h2>
+            {% if request.user.is_superuser %}
+                {% if post.count_unapproved %}
+                    <span id="commentCount">{{ post.count_all_comments }}*</span>
+                {% else %}
+                    <span id="commentCount">{{ post.count_approved }}</span>
+                {% endif %}
+            {% else %}
+                <span id="commentCount">{{ post.count_approved }}</span>
+            {% endif %}
+            comments
+        </h2>
+        {% for comment in comments %}
+        {% if comment.approved %}
+        <div class="m-2">
+            <div class="row commsApproved comment" id="detailBlogComment-{{ comment.id }}">
+                <div class="col-md-8 text-start py-2 px-4">
+                    <a href="{% url 'account:profile' comment.author.id %}">{{ comment.author }}</a> says:
+                </div>
+                <div class="col-md-4 text-end py-2 px-4" id="commentBlog-{{ comment.id }}">
+                    {% if request.user.is_authenticated %}
+                    {% include './snippets/commentLikes.html' %}
+                    {% else %}
+                    <p class="pr-3 pt-2" style="color: red;"><i class="fa-solid fa-heart"> {{ comment.likes }}</i></p>
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <p class="text-white text-start p-2" id="appCommBody">{{ comment.text }}</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        {% if request.user.is_superuser or request.user == comment.author %}
+        <div class="m-2">
+            <div class="row commsNotApproved comment" id="detailBlogComment-{{ comment.id }}">
+                <div class="col-md-8 text-start py-2 px-4">
+                    <a href="{% url 'account:profile' comment.author.id %}">{{ comment.author }}</a> says:
+                </div>
+                <div class="col-md-4 text-end py-2 px-4">
+                    {% if request.user.is_superuser %}
+                    <button class="btn btn-outline-success" name="approve" id="btnAppComm-{{ comment.id }}"><i class="fa-regular fa-square-check"></i></button>
+                    {% include './snippets/ajaxApprove.html' %}
+                    {% endif %}
+                    {% include './snippets/commentLikes.html' %}
+                    {% include './snippets/ajaxDelete.html' %}
+                </div>
+                <div class="col-md-12">
+                    <p class="text-white text-start p-2" id="unappCommBody">{{ comment.text }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% if not request.user.is_authenticated %}
+    <div class="col-md-12 my-4 p-2" id="unauthenticatedComm">
+        <div class="commentsBody text-white text-center">
+            <p class="pt-2">You can not post comments as guest.</p>
+            <p class="pb-2">You can
+                <a class="commentLogReg" href="{% url 'account:login' %}">login</a>
+                if you have an account or
+                <a class="commentLogReg" href="{% url 'account:register' %}">register</a>
+                for one.
+            </p>
+        </div>
+    </div>
+    {% else %}
+        {% include './snippets/addComment.html' %}
+    {% endif %}
+</div>

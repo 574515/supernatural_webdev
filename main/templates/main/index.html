@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="col-lg-3 d-none d-lg-block">
+    {% include './snippets/profile_card.html' %}
+</div>
+<div class="col-12 col-md-9 col-lg-6 unselectable p-4" style="background-color: rgba(20, 20, 20, 0.6); border-radius: 25px;">
+    <h3 class="mx-auto text-center">Blog posts?</h3>    
+</div>
+<div class="d-none d-md-flex col-md-3 col-lg-3 col-sm-2 unselectable text-white">
+    <div class="row">
+        <div class="col-12 p-3 text-center">    
+            <button class="btn btn-outline-danger btn-sm w-100" id="turnOffTweets">Turn off Tweets</button>     
+            <div class="input-group my-2">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" value="" id="limitTweetsCb">
+                </div>
+                <input type="number" class="form-control" id="limitTweets" maxlength="2" min="1" max="99" placeholder="Limit number of tweets">
+            </div>
+        </div>
+        <div class="col-12">
+            <a
+            class="twitter-timeline"
+            data-dnt="true"
+            data-lang="en"
+            data-height="100vh"
+            data-theme="dark"
+            data-tweet-limit="3"
+            href="https://twitter.com/cw_spn?ref_src=twsrc%5Etfw"
+            id="tweetsHolder" 
+            >Tweets by cw_spn</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </div>
+</div>
+<script>
+
+
+$(document).ready(function() {
+
+    $('#limitTweetsCb').change(function(e) {
+        if(this.checked) {
+            let numOfTw = $("#limitTweets").val();
+            if (numOfTw == "" || numOfTw < 1 || numOfTw > 99) $("#limitTweets").prop("placeholder", "Enter a number").addClass("limitedTweets");
+            else {
+
+                var abc = $("#tweetsHolder");
+                console.log(abc);
+
+                console.log($('#tweetsHolder').attr('data-tweet-limit'));            
+            }
+        }
+        else {
+            $("#limitTweets").prop("placeholder", "Limit number of tweets").removeClass("limitedTweets");
+        }
+    });
+
+});
+
+
+</script>
+{% endblock %}

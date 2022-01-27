@@ -1,0 +1,15 @@
+<div class="row m-1 p-3 commsNotApproved unselectable">
+    <div class="col-md-12">
+        <p>{{ comment.author }} commented on <a id="pubAuthorA" href="{% url 'blog:detail' comment.post.slug %}">{{ comment.post.title|truncatechars:12 }}</a>:</p>
+    </div>
+    <div class="col-md-12 me-1 my-2 p-3" style="border: 1px solid darkred; border-radius: 10px;">
+        <figure>
+            <blockquote class="blockquote">
+                {{ comment }}
+            </blockquote>
+            <figcaption class="blockquote-footer mt-2">
+                <cite>{{ comment.created_at }}</cite>
+            </figcaption>
+        </figure>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+{% load static %}
+<div class="container py-3 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-10">
+            <ul class="nav nav-tabs unselectable" id="profileTab" role="tablist">
+                <li class="nav-item ml-3 pr-1" role="presentation">
+                    <button class="nav-link active" disabeled unselectable>{{ currUser.username }}'s profile</button>
+                </li>
+            </ul>
+            <div class="tab-content unselectable">
+                <div class="tab-pane p-3 active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                    <div class="row text-center text-md-end px-3">
+                        <div class="col-6 p-2 d-md-none text-center">
+                            <button class="btn btn-outline-success btn-sm w-100" id="togglePosts">Posts</button>
+                        </div>
+                        <div class="col-6 p-2 d-md-none text-center">
+                            <button class="btn btn-outline-danger btn-sm w-100" id="toggleComments">Comments</button>
+                        </div>
+                    </div>
+                    <div class="row py-2 mx-3">
+                        <div class="col-12 col-md-8">
+                            <h3 class="d-none d-md-block text-center">Posts</h3>
+                            {% if pub_posts %}
+                                {% for post in pub_posts %}
+                                    <div class="m-2 postAccountPublished align-items-center text-white d-md-flex d-none" id="accPostsDiv">
+                                        {% include './publishedPost.html' %}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <h3 class="text-center">{{ currUser }}, has no posts yet.</h3>
+                            {% endif %}
+                        </div>
+                        <div class="col-12 col-md-4 mt-3 mt-md-0 d-md-block d-none" id="accCommsDiv">
+                            <h3 class="d-none d-md-block text-center">Comments</h3>
+                            {% if app_comms %}
+                                {% for comment in app_comms %}
+                                    {% include './commentApproved.html' %}
+                                {% endfor %}
+                            {% else %}
+                                <h3 class="text-center">{{ currUser }}, has no comments yet.</h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="tab-pane p-3 unselectable" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+    {% if comments %}
+        <div class="row text-start">
+            <div class="col-6 p-2 d-md-none text-center">
+                <button class="btn btn-outline-success btn-sm w-100" id="toggleApproved">Approved</button>
+            </div>
+            <div class="col-6 p-2 d-md-none text-center">
+                <button class="btn btn-outline-danger btn-sm w-100" id="toggleUnapproved">Unapproved</button>
+            </div>
+            <div class="col-12 col-md-6 mt-3 mt-md-0 d-md-block d-none" id="approvedCommentsDiv">
+                <h3 class="d-none d-md-block text-center">Approved Comments</h3>
+                {% for comment in app_comms %}
+                    {% include './snippets/commentApproved.html' %}
+                {% endfor %}
+            </div>
+            <div class="col-12 col-md-6 mt-3 mt-md-0 d-md-block d-none" id="unapprovedCommentsDiv">
+                <h3 class="d-none d-md-block text-center">Unapproved Comments</h3>
+                {% for comment in unapp_comms %}
+                    {% include './snippets/commentUnapproved.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <h3 class="text-center">{{ currUser }}, {% if request.user == currUser %}you have yet to comment...{% else %}has no comments yet.{% endif %}</h3>
+    {% endif %}
+</div>   

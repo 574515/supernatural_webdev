@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+{% load static %}
+<head>
+    <title>{% block title %}Login{% endblock %}</title>
+</head>
+{% block content %}
+<div class="container-fluid loginregister-dark my-3 unselectable">
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <img src="{% static '/assets/loginMeg.gif' %}" class="img-fluid" alt="Gif" id="gif">
+                </div>
+                <div class="form-group">
+                    <h3>Log In</h3>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="email" name="email" placeholder="E-mail" autofocus>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>                    
+                <div class="form-group bttns">
+                    <button class="btn btn-primary btn-block" name="login" type="submit">Log In</button>
+                </div>
+                <a href="{% url 'account:register' %}" class="register">Don't have an account? Sign up!</a>
+                <a href="{% url 'account:password_reset' %}" class="forgot">Forgot your email or password?</a>
+                <div class="col-md-12 mb-4 text-center py-2 errors">
+                    {% for field in login_form %}
+                        {% for error in field.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                    {% endfor %}
+                    {% if login_form.non_field_errors %}
+                        <p>{{ login_form.non_field_errors }}</p>                    
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,264 @@
+import json
+from django.http import HttpResponseRedirect, HttpResponse
+from django.http.response import Http404
+from django.shortcuts import render, get_object_or_404, redirect
+from blog.models import BlogPost, Comment, LikeComment, LikePost
+from account.models import Account
+from blog.forms import CommentForm, CreateBlogPostForm, UpdateBlogPostForm
+from django.urls import reverse
+
+
+from django.views.generic import View
+from django.http import JsonResponse
+
+def BlogIndexView(request):
+	context = {}
+	user = request.user
+	all_posts = BlogPost.objects.all()
+	pub_posts = BlogPost.objects.filter(published=True).all()
+	comments = Comment.objects.all()
+
+	if all_posts:
+		last_post = BlogPost.objects.order_by('-pub_date')[0]
+		context['last_post'] = last_post
+	if comments:
+		last_comment = Comment.objects.order_by('-created_at')[0]
+		context['last_comment'] = last_comment
+
+	user_has_posts = False
+	for post in all_posts:
+		if post.author == user:
+			not user_has_posts
+	
+	users = Account.objects.all()
+	admins = Account.objects.filter(is_admin=True).all()
+
+	if users:
+		last_joined = Account.objects.order_by('-date_joined')[0]
+		context['last_joined'] = last_joined
+
+	if user_has_posts:
+		unpub_withauth = BlogPost.objects.filter(author=user).all()
+
+	if user.is_superuser:
+		context['posts'] = all_posts
+	elif user.is_authenticated and user_has_posts:
+		context['posts'] = unpub_withauth
+	else:
+		context['posts'] = pub_posts
+
+	context['comments'] = comments
+	context['navbar'] = 'blogindex'
+	context['users'] = users
+	context['admins'] = admins
+	return render(request, 'blog/blog_index.html', context)
+	
+
+def CreateBlogView(request):
+	context = {}
+	
+	user = request.user
+	if not user.is_authenticated:
+		return redirect('must_authenticate')
+		
+	form = CreateBlogPostForm(request.POST or None, request.FILES or None)
+	if form.is_valid():
+		obj = form.save(commit=False)
+		author = Account.objects.filter(email=request.user.email).first()
+		obj.author = author
+		obj.save()
+		form = CreateBlogPostForm()
+		return HttpResponseRedirect(reverse('index'))
+		
+	context['form'] = form
+	
+	return render(request, 'blog/create_blog.html', context)
+
+
+def DetailBlogView(request, slug):
+	context = {}    
+	user = request.user
+	try:
+		blog_post = get_object_or_404(BlogPost, slug=slug)
+	except Http404:
+		return redirect('index')
+
+	# if not blog_post.published:
+	#     if not user.is_superuser or not blog_post.author == user:        
+	#         return redirect('index')
+
+	comments = blog_post.comments.all()
+	new_comment = None
+	if request.method == 'POST':
+		comment_form = CommentForm(data=request.POST)
+		if comment_form.is_valid():
+			new_comment = comment_form.save(commit=False)
+			new_comment.post = blog_post
+			new_comment.author = user
+			new_comment.save()
+	else:
+		comment_form = CommentForm()
+
+
+	context = {
+		'post': blog_post,
+		'comments': comments,
+		'new_comment': new_comment,
+		'comment_form': comment_form,
+	}
+
+	return render(request, 'blog/detail_blog.html', context)
+
+
+def EditBlogView(request, slug):
+	context = {}
+
+	user = request.user
+	if not user.is_authenticated:
+		return redirect('must_authenticate')
+
+	blog_post = get_object_or_404(BlogPost, slug=slug)
+	if request.POST:
+		form = UpdateBlogPostForm(request.POST or None, request.FILES or None, instance=blog_post)
+		if form.is_valid():
+			obj = form.save(commit=False)
+			obj.save()
+			context['success_message'] = 'Updated!'
+			blog_post = obj
+
+	form = UpdateBlogPostForm(
+		initial = {
+			'title': blog_post.title,
+			'description': blog_post.description,
+			'body': blog_post.body,
+			'image': blog_post.image,
+		}
+	)
+	context['form'] = form
+	context['post'] = blog_post
+	return render(request, 'blog/edit_blog.html', context)
+
+
+def PublishPostView(request, slug):
+	if not request.user.is_superuser:
+		return redirect('must_authenticate')
+
+	try:
+		post = get_object_or_404(BlogPost, slug=slug)        
+	except BlogPost.DoesNotExist:
+		return HttpResponse('Product not found', status=404)
+	except Exception:
+		return HttpResponse('Internal Error', status=500)
+
+	if request.method == 'GET':
+		if not post.published:
+			post.published = True
+			post.save()
+		else:           
+			post.published = False
+			post.save()
+			
+	return HttpResponse(json.dumps({"good": True}), content_type="application/json")
+
+
+
+def DeletePostView(request, slug):
+	if not request.user.is_authenticated or not request.user.is_superuser:
+		return redirect('must_authenticate')
+	post = BlogPost.objects.get(slug=slug)
+	post.delete()
+	return HttpResponseRedirect(reverse('index'))
+
+
+# ! TEST
+def PostCommentView(request, slug):
+	user = request.user
+	if not user.is_authenticated:
+		return redirect('must_authenticate')
+
+	post = get_object_or_404(BlogPost, slug=slug)
+	if post and is_ajax(request):
+		text = request.POST.get('text', None)
+		if text:
+			comment = post.comments.create(
+								post=post.id,
+								author=user,
+								text=text,
+						)
+			comment.save()			
+			response = {#'posted_comment': comment
+				'msg': "IDE GAAAS!",
+				'text': comment.text,
+				'post': post.slug,
+				'comm_id': comment.id,
+				'author': comment.author.username,
+				'likes': comment.likes,
+			}
+			return JsonResponse(response)
+
+
+def is_ajax(request):
+	return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+def PostLikesView(request, post_id):
+	if request.user.is_anonymous:
+		return redirect('must_authenticate')
+	if request.method == "GET":
+		user = Account.objects.get(id=request.user.id)
+		post = BlogPost.objects.get(id=post_id)
+		if user in post.userlikes.all():
+			post.likes -= 1
+			post.userlikes.remove(user)
+		else:
+			post.likes += 1
+			post.userlikes.add(user)
+		post.save()
+		return HttpResponse(json.dumps({"good": True}), content_type="application/json")
+
+
+
+def ApproveCommentView(request):
+	if not request.user.is_superuser:
+		return redirect('must_authenticate')
+
+	if request.method == "GET":
+		id1 = request.GET.get('id', None)
+		comment = Comment.objects.get(id=id1)
+		comment.approved = True
+		comment.save()
+		data = {
+			'success': True
+		}
+		return JsonResponse(data)
+
+
+def DeleteCommentView(request):
+	if request.method == "GET":
+		id1 = request.GET.get('id', None)
+		Comment.objects.get(pk=id1).delete()
+		data = {
+			'deleted': True
+		}
+		return JsonResponse(data)
+
+
+def CommentLikesView(request, comment_id, post_id):
+	if request.user.is_anonymous:
+		return redirect('must_authenticate')
+
+	if request.method == "GET":
+		user = Account.objects.get(id=request.user.id)
+		comment = Comment.objects.get(id=comment_id)
+		post = BlogPost.objects.get(id=post_id)
+		new_like = LikeComment(commlike_user=user, comment=comment)
+		if user in comment.userlikes.all():
+			new_like.alreadyLiked = False
+			comment.likes -= 1
+			comment.userlikes.remove(user)
+		else:
+			new_like.alreadyLiked = True
+			comment.likes += 1
+			comment.userlikes.add(user)
+		comment.save()
+		new_like.save()
+		return HttpResponse(json.dumps({"good": True}), content_type="application/json")
