@@ -4,33 +4,27 @@ from blog.views import (
     DetailBlogView,
     EditBlogView,
     PublishPostView,
-    DeletePostView,    
+    delete_post_view,    
     PostLikesView,
     PostCommentView,
-    ApproveCommentView,
     DeleteCommentView,
     BlogIndexView,
-    CommentLikesView
+    comment_likes_view,
 )
 
 app_name = 'blog'
 
 urlpatterns = [
+    # ! Blog posts
     path('', BlogIndexView, name='blogindex'),
     path('create', CreateBlogView, name='create'),
     path('<slug>', DetailBlogView, name='detail'),
     path('<slug>/edit', EditBlogView, name='edit'),
     path('<slug>/publish', PublishPostView, name='publish'),
-    path('<slug>/delete', DeletePostView, name='delete'),
-
-    
+    path('<slug>/delete', delete_post_view, name='delete'),
     path('<int:post_id>/like', PostLikesView, name='postlike'),
-
-    # Comments
+    # ! Comments
     path('<slug>/comment', PostCommentView, name='comment'),
-
-
-    path('approvecomment/', ApproveCommentView, name="approvecomment"),    
-    path('deletecomment/', DeleteCommentView, name="deletecomment"),
-    path('<int:post_id>/<int:comment_id>/likecomment', CommentLikesView, name='commentlike'),
+    path('deletecomment', DeleteCommentView, name="deletecomment"),
+    path('likecomment', comment_likes_view, name='commentlike'),
 ]

@@ -1,0 +1,65 @@
+{% if post.author == request.user or request.user.is_superuser %}
+<div class="col-4 text-end p-2">
+    <a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-warning">
+        <i class="fa-regular fa-pen-to-square"></i>
+    </a>
+    <form action="" method="post" id="deleteForm" style="display: inline;">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger" onclick="yesNoDelete()">
+            <i class="fa-solid fa-trash-can"></i>
+        </button>
+    </form>
+    {% if request.user.is_superuser %}
+    <button type="submit" class="btn btn-outline-success btn-sm" id="pubUnpubPost">
+        <i class="fa-regular fa-lemon" id="lemonDetailBlog"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan">Publish</span>
+    </button>
+    {% endif %}
+</div>
+{% endif %}
+<script>
+
+    function yesNoDelete() {
+        var title = "{{ post.title }}"
+        confirm("You are about to delete post [" + title + "].") ? $('#deleteForm').attr("action", "{% url 'blog:delete' post.slug %}") : $('#deleteForm').attr('action', '');
+    }
+
+    let getState = "{{ post.published }}",
+        pubState;
+    getState == "True" ? (pubState = true) : (pubState = false);
+
+    pubState ? $("#postOverview").addClass("postOverviewPub").removeClass("postOverviewUnpub") : $("#postOverview").addClass("postOverviewUnpub").removeClass("postOverviewPub");
+
+    function handlePublishDecoration() {
+        $("#pubUnpubPostSpan").html(pubState == true ? "Unpublish" : "Publish");
+        if (pubState == true) {
+            $("#pubUnpubPost").addClass("btn-outline-danger").removeClass("btn-outline-success");
+            $("#lemonDetailBlog").addClass("fa-solid").removeClass("fa-regular");
+            $("#btnPostLikes-{{ post.id }}").removeClass("d-none");
+            $("#postOverview").addClass("postOverviewPub").removeClass("postOverviewUnpub");
+            $("#unauthenticatedComm").removeClass("d-none");
+        } else {
+            $("#pubUnpubPost").addClass("btn-outline-success").removeClass("btn-outline-danger");
+            $("#lemonDetailBlog").addClass("fa-regular").removeClass("fa-solid");
+            $("#btnPostLikes-{{ post.id }}").addClass("d-none");
+            $("#postOverview").addClass("postOverviewUnpub").removeClass("postOverviewPub");
+            $("#unauthenticatedComm").addClass("d-none");
+        }
+    }
+
+    handlePublishDecoration();
+
+    $("#pubUnpubPost").click(function (e) {
+        $.ajax({
+            url: "{% url 'blog:publish' post.slug %}",
+            type: "GET",
+            data: {},
+            cache: false,
+            dataType: "json",
+            success: function () {
+                pubState = !pubState;
+                handlePublishDecoration();
+            },
+            fail: function () { },
+        });
+    });
+</script>

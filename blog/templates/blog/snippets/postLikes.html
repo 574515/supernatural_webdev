@@ -1,47 +1,47 @@
-<button class="btn btn-outline-danger btn-sm{% if not post.published %} d-none{% endif %}" type="submit" id="btnPostLikes-{{ post.id }}">
+<button class="btn btn-outline-danger btn-sm{% if not post.published %} d-none{% endif %}" id="btnPostLikes-{{ post.id }}">
     <i class="fa-solid fa-heart" id="heartPostDetail-{{ post.id }}}"></i>&nbsp;&nbsp;<span id="postNumLikes-{{ post.id }}"></span>
 </button>
 
 <script>
     likeComment();
 
-function likeComment() {  
+    function likeComment() {
 
-    let isInUsers, numOfLikes = "{{ post.likes }}";
-    "{% for user in post.userlikes.all %}"
+        let isInUsers, numOfLikes = "{{ post.likes }}";
+        "{% for user in post.userlikes.all %}"
         "{{ request.user }}" == "{{ user }}" ? isInUsers = true : false;
-    "{% endfor %}"
-    
-    $("#postNumLikes-{{ post.id }}").html(numOfLikes);
-    if (isInUsers) {
-        $("#heartPostDetail-{{ post.id }}").addClass("fa-solid").removeClass("fa-regular");
-        $("#postNumLikes-{{ post.id }}").html(numOfLikes--);
-    }
-    else {
-        $("#heartPostDetail-{{ post.id }}").addClass("fa-regular").removeClass("fa-solid");
-        $("#postNumLikes-{{ post.id }}").html(numOfLikes++);
-    }
+        "{% endfor %}"
 
-    $("#btnPostLikes-{{ post.id }}").click(function(e) {
-        $.ajax({
-            url: "{% url 'blog:postlike' post.id %}",
-            type: "GET",
-            data: {},
-            cache: false,
-            dataType: "json",
-            success: function() {
-                isInUsers = !isInUsers;
-                if (isInUsers) {
-                    $("#heartPostDetail-{{ post.id }}").addClass("fa-solid").removeClass("fa-regular");
-                    $("#postNumLikes-{{ post.id }}").html(numOfLikes--);
-                }
-                else {
-                    $("#heartPostDetail-{{ post.id }}").addClass("fa-regular").removeClass("fa-solid");
-                    $("#postNumLikes-{{ post.id }}").html(numOfLikes++);
-                }
-            },
-            fail: function() {}
+        $("#postNumLikes-{{ post.id }}").html(numOfLikes);
+        if (isInUsers) {
+            $("#heartPostDetail-{{ post.id }}").addClass("fa-solid").removeClass("fa-regular");
+            $("#postNumLikes-{{ post.id }}").html(numOfLikes--);
+        }
+        else {
+            $("#heartPostDetail-{{ post.id }}").addClass("fa-regular").removeClass("fa-solid");
+            $("#postNumLikes-{{ post.id }}").html(numOfLikes++);
+        }
+
+        $("#btnPostLikes-{{ post.id }}").click(function (e) {
+            $.ajax({
+                url: "{% url 'blog:postlike' post.id %}",
+                type: "GET",
+                data: {},
+                cache: false,
+                dataType: "json",
+                success: function () {
+                    isInUsers = !isInUsers;
+                    if (isInUsers) {
+                        $("#heartPostDetail-{{ post.id }}").addClass("fa-solid").removeClass("fa-regular");
+                        $("#postNumLikes-{{ post.id }}").html(numOfLikes--);
+                    }
+                    else {
+                        $("#heartPostDetail-{{ post.id }}").addClass("fa-regular").removeClass("fa-solid");
+                        $("#postNumLikes-{{ post.id }}").html(numOfLikes++);
+                    }
+                },
+                fail: function () { }
+            });
         });
-    });
-}
+    }
 </script>

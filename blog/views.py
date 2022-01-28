@@ -76,16 +76,18 @@ def CreateBlogView(request):
 
 
 def DetailBlogView(request, slug):
-	context = {}    
 	user = request.user
+	if not user.is_authenticated:
+		return redirect('account:must_authenticate')
+	context = {}    
 	try:
 		blog_post = get_object_or_404(BlogPost, slug=slug)
 	except Http404:
 		return redirect('index')
 
-	# if not blog_post.published:
-	#     if not user.is_superuser or not blog_post.author == user:        
-	#         return redirect('index')
+	if not blog_post.published:
+		if not user.is_superuser and not blog_post.author == user:        
+			return redirect('index')
 
 	comments = blog_post.comments.all()
 	new_comment = None
@@ -162,7 +164,7 @@ def PublishPostView(request, slug):
 
 
 
-def DeletePostView(request, slug):
+def delete_post_view(request, slug):
 	if not request.user.is_authenticated or not request.user.is_superuser:
 		return redirect('must_authenticate')
 	post = BlogPost.objects.get(slug=slug)
@@ -185,14 +187,16 @@ def PostCommentView(request, slug):
 								author=user,
 								text=text,
 						)
-			comment.save()			
+			comment.save()
+			if not comment.likes:
+				likes = 0
 			response = {#'posted_comment': comment
-				'msg': "IDE GAAAS!",
 				'text': comment.text,
 				'post': post.slug,
 				'comm_id': comment.id,
 				'author': comment.author.username,
-				'likes': comment.likes,
+				'likes': likes,
+				'success_msg': "Comment posted successfully!",
 			}
 			return JsonResponse(response)
 
@@ -216,40 +220,23 @@ def PostLikesView(request, post_id):
 		return HttpResponse(json.dumps({"good": True}), content_type="application/json")
 
 
-
-def ApproveCommentView(request):
-	if not request.user.is_superuser:
-		return redirect('must_authenticate')
-
-	if request.method == "GET":
-		id1 = request.GET.get('id', None)
-		comment = Comment.objects.get(id=id1)
-		comment.approved = True
-		comment.save()
-		data = {
-			'success': True
-		}
-		return JsonResponse(data)
-
-
 def DeleteCommentView(request):
-	if request.method == "GET":
-		id1 = request.GET.get('id', None)
-		Comment.objects.get(pk=id1).delete()
+	if request.method == "POST":
+		id = request.POST.get('id', None)
+		Comment.objects.get(pk=id).delete()
 		data = {
 			'deleted': True
 		}
 		return JsonResponse(data)
 
 
-def CommentLikesView(request, comment_id, post_id):
+def comment_likes_view(request):
 	if request.user.is_anonymous:
-		return redirect('must_authenticate')
-
-	if request.method == "GET":
+		return redirect('account:must_authenticate')
+	if request.method == "POST":
+		id = request.POST.get('id', None)
 		user = Account.objects.get(id=request.user.id)
-		comment = Comment.objects.get(id=comment_id)
-		post = BlogPost.objects.get(id=post_id)
+		comment = Comment.objects.get(id=id)
 		new_like = LikeComment(commlike_user=user, comment=comment)
 		if user in comment.userlikes.all():
 			new_like.alreadyLiked = False
@@ -259,6 +246,8 @@ def CommentLikesView(request, comment_id, post_id):
 			new_like.alreadyLiked = True
 			comment.likes += 1
 			comment.userlikes.add(user)
-		comment.save()
 		new_like.save()
+		comment.save()
 		return HttpResponse(json.dumps({"good": True}), content_type="application/json")
+	else:
+		return redirect('account:must_authenticate')

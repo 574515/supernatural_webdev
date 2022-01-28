@@ -1,25 +1,14 @@
-<button class="btn btn-outline-danger btn-sm" type="submit" id="btnCommentLikes-{{ comment.id }}">
+<button class="btn btn-outline-danger btn-sm {% if request.user == comment.author %}disabled{% endif %}" type="submit" id="btnCommentLikes-{{ comment.id }}">
     <i class="fa-solid fa-heart" id="heartCommentDetail-{{ comment.id }}"></i>&nbsp;&nbsp;<span id="commNumLikes-{{ comment.id }}"></span>
 </button>
-
-{% if request.user.is_superuser or request.user == comment.author %}
-<button class="btn btn-outline-danger" type="submit" id="btnCommentDelete-{{ comment.id }}">
-    <i class="fa-solid fa-trash-can"></i>
-</button>
-{% include './ajaxDelete.html' %}
-{% endif %}
-
 <script>
-
     likeComment();
-
-    function likeComment() {  
-
+    function likeComment() {
         let isInUsers, numOfLikes = "{{ comment.likes }}";
         "{% for user in comment.userlikes.all %}"
-            "{{ request.user }}" == "{{ user }}" ? isInUsers = true : false;
+        "{{ request.user }}" == "{{ user }}" ? isInUsers = true : false;
         "{% endfor %}"
-        
+
         $("#commNumLikes-{{ comment.id }}").html(numOfLikes);
         if (isInUsers) {
             $("#heartCommentDetail-{{ comment.id }}").addClass("fa-solid").removeClass("fa-regular");
@@ -30,14 +19,18 @@
             $("#commNumLikes-{{ comment.id }}").html(numOfLikes++);
         }
 
-        $("#btnCommentLikes-{{ comment.id }}").click(function(e) {
+        $("#btnCommentLikes-{{ comment.id }}").click(function (e) {
             $.ajax({
-                url: "{% url 'blog:commentlike' comment.post.id comment.id %}",
-                type: "GET",
-                data: {},
+                url: "{% url 'blog:commentlike' %}",
+                type: "POST",
+                data: {
+                    'id': "{{ comment.id }}",
+                    'post_slug': "{{ comment.post.slug }}",
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
                 cache: false,
                 dataType: "json",
-                success: function() {
+                success: function () {
                     isInUsers = !isInUsers;
                     if (isInUsers) {
                         $("#heartCommentDetail-{{ comment.id }}").addClass("fa-solid").removeClass("fa-regular");
@@ -48,7 +41,12 @@
                         $("#commNumLikes-{{ comment.id }}").html(numOfLikes++);
                     }
                 },
-                fail: function() {}
+                fail: function () {
+                    console.log("???");
+                },
+                error: function () {
+                    console.log("ERROR");
+                }
             });
         });
     }

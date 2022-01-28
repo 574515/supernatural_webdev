@@ -1,17 +1,17 @@
 body {
-    background: url('../assets/bgImage.jpg') no-repeat center center fixed;
+    background: url("../assets/bgImage.jpg") no-repeat center center fixed;
     background-size: cover;
     /* ! text-align: center;*/
     height: 100vh;
     font-family: cursive;
     -webkit-background-size: cover;
-    -moz-background-size: cover;    
+    -moz-background-size: cover;
     -o-background-size: cover;
 }
 
 .glow {
     font-size: 6vw;
-    color: #0047AB;
+    color: #0047ab;
     text-align: center;
 }
 
@@ -30,10 +30,14 @@ body {
 
 @keyframes glow {
     from {
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073, 0 0 25px #e60073, 0 0 30px #e60073, 0 0 35px #e60073;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073,
+            0 0 20px #e60073, 0 0 25px #e60073, 0 0 30px #e60073,
+            0 0 35px #e60073;
     }
     to {
-        text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 15px #ff4da6, 0 0 20px #ff4da6, 0 0 25px #ff4da6, 0 0 30px #ff4da6, 0 0 35 px #ff4da6;
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 15px #ff4da6,
+            0 0 20px #ff4da6, 0 0 25px #ff4da6, 0 0 30px #ff4da6,
+            0 0 35 px #ff4da6;
     }
     /* 0% { transform: skewX(-15deg); }
     5% { transform: skewX(30deg); }
@@ -69,7 +73,8 @@ body {
     opacity: 75%;
 }
 
-.profileCard form .form-control, #accountEditProfile form .form-control {
+.profileCard form .form-control,
+#accountEditProfile form .form-control {
     background: none;
     border: none;
     border-bottom: 1px solid #434a52;
@@ -88,7 +93,6 @@ body {
     border: 3px solid yellow;
 }
 
-
 .postAccountUnpublished {
     border-radius: 25px;
     background-color: rgba(139, 0, 0, 0.3);
@@ -103,14 +107,14 @@ body {
     box-shadow: 3px 3px 4px black;
 }
 
-
-
 .postAccount a {
     text-decoration: none;
     color: darkgrey;
 }
 
-.postAccount a:hover { color: grey; }
+.postAccount a:hover {
+    color: grey;
+}
 
 .accountPostTitle {
     text-decoration: none;
@@ -123,22 +127,29 @@ body {
     text-shadow: 3px 3px 5px darkblue;
 }
 
-/* ? FOOTER */
-footer { opacity: 75%; }
+#success_msg { display: none; }
 
-footer:hover { opacity: 95%; }
+/* ? FOOTER */
+footer {
+    opacity: 75%;
+}
+
+footer:hover {
+    opacity: 95%;
+}
 
 .project a {
     text-decoration: none;
     color: darkgrey;
 }
 
-.project a:hover { color: grey; }
+.project a:hover {
+    color: grey;
+}
 
-.content p.red { color: red; }
-
-
-
+.content p.red {
+    color: red;
+}
 
 #postImageAccount {
     object-fit: cover;
@@ -149,12 +160,10 @@ footer:hover { opacity: 95%; }
     transition: transform 0.2s;
 }
 
-#postImageAccount:hover { 
+#postImageAccount:hover {
     border: 1px solid red;
     transform: scale(1.05);
 }
-
-
 
 #postImage {
     max-width: 100%;
@@ -164,12 +173,10 @@ footer:hover { opacity: 95%; }
     filter: blur(1.5px);
 }
 
-#postImage:hover { 
+#postImage:hover {
     transition: all 0.5s ease;
     filter: blur(0);
 }
-
-
 
 .tab-pane {
     background-color: rgba(30, 40, 51, 0.9);
@@ -185,7 +192,9 @@ footer:hover { opacity: 95%; }
     box-shadow: 1px 1px 3px darkblue;
 }
 
-#profileTab { border: none; }
+#profileTab {
+    border: none;
+}
 
 #profileTab .nav-link {
     background-color: rgba(30, 40, 51, 0.7);
@@ -202,7 +211,7 @@ footer:hover { opacity: 95%; }
 
 #profileTab .nav-link.active {
     background-color: rgba(30, 40, 51, 0.9);
-    text-shadow: 0 0 15px rgb(155,135,12, 0.9);
+    text-shadow: 0 0 15px rgb(155, 135, 12, 0.9);
 }
 
 .imagesIndex {
@@ -211,15 +220,11 @@ footer:hover { opacity: 95%; }
     background-color: rgba(50, 50, 120, 0.7);
 }
 
-
-
-
 .comment {
     background-color: rgba(1, 50, 32, 0.7);
     border-radius: 25px;
     box-shadow: 3px 3px 4px black;
 }
-
 
 #accountDesc {
     transition: all 0.5s ease;
@@ -228,27 +233,38 @@ footer:hover { opacity: 95%; }
 #accountDesc:hover {
     text-shadow: 10px 10px 5px black;
     transition: all 0.5s ease;
-    animation: .8s shake infinite alternate;
+    animation: 0.8s shake infinite alternate;
     animation-delay: 0.5s;
 }
 
-
 @keyframes shake {
-  0% { transform: skewX(-15deg); }
-  5% { transform: skewX(15deg); }
-  10% { transform: skewX(-15deg); }
-  15% { transform: skewX(15deg); }
-  20% { transform: skewX(0deg); }
-  100% { transform: skewX(0deg); }  
+    0% {
+        transform: skewX(-15deg);
+    }
+    5% {
+        transform: skewX(15deg);
+    }
+    10% {
+        transform: skewX(-15deg);
+    }
+    15% {
+        transform: skewX(15deg);
+    }
+    20% {
+        transform: skewX(0deg);
+    }
+    100% {
+        transform: skewX(0deg);
+    }
 }
 
 #unappCommBody {
-    border: 1px dashed rgba(139,0,0, 0.5);
+    border: 1px dashed rgba(139, 0, 0, 0.5);
     border-radius: 25px;
 }
 
 #appCommBody {
-    border: 1px dashed rgba(0,100,0, 0.5);
+    border: 1px dashed rgba(0, 100, 0, 0.5);
     border-radius: 25px;
 }
 
@@ -299,7 +315,7 @@ textarea {
     box-shadow: 3px 3px 5px black;
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
     .ma-full-width {
         width: 100%;
         margin: 2% 0;

@@ -56,7 +56,7 @@ def LogoutView(request):
 
 
 def MustAuthenticateView(request):
-    if request.user.is_authenticated or request.user.is_anonymous:
+    if request.user.is_authenticated:
         return HttpResponseRedirect("/")
     return render(request, 'account/must_authenticate.html', {})
 

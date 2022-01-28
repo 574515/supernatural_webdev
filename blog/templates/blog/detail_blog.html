@@ -1,102 +1,52 @@
-{% extends 'main/base.html' %}
-{% load static %}
+{% extends 'main/base.html' %} {% load static %}
+
 <head>
-	<title>{% block title %}{{ post.title }}{% endblock %}</title>
+    <title>{% block title %}{{ post.title }}{% endblock %}</title>
 </head>
 {% block content %}
 <div class="container-fluid unselectable">
-	<div class="row text-white m-3 px-3 py-2" id="postOverview">
-		<div class="col-12 col-md-7">
-			<div class="row align-items-center">
-				<div class="
-					{% if post.author == request.user or request.user.is_superuser %}col-8 text-start
-					{% else %}col-12 text-center{% endif %} p-2">
-					<h2>{{ post.title }}</h2>
-				</div>
-				{% if post.author == request.user or request.user.is_superuser %}
-				<div class="col-4 text-end p-2">
-					<a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-warning btn-sm">
-					<i class="fa-regular fa-pen-to-square"></i>&nbsp;&nbsp;Edit
-					</a>
-					<button type="submit" class="btn btn-outline-success btn-sm" id="pubUnpubPost">
-					<i class="fa-regular fa-lemon" id="lemonDetailBlog"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan">Publish</span>
-					</button>
-					<script>                            
-						let getState = "{{ post.published }}", pubState;
-						getState == "True" ? pubState = true : pubState = false;
-
-                        pubState ? 
-                        $("#postOverview").addClass("postOverviewPub").removeClass("postOverviewUnpub") : 
-                        $("#postOverview").addClass("postOverviewUnpub").removeClass("postOverviewPub");
-
-						function handlePublishDecoration() {
-						    $("#pubUnpubPostSpan").html(pubState == true ? "Unpublish" : "Publish");
-						    if (pubState == true) {
-						        $("#pubUnpubPost").addClass("btn-outline-danger").removeClass("btn-outline-success");
-						        $("#lemonDetailBlog").addClass("fa-solid").removeClass("fa-regular");
-                                $("#btnPostLikes-{{ post.id }}").removeClass("d-none");
-                                $("#postOverview").addClass("postOverviewPub").removeClass("postOverviewUnpub")
-						    }
-						    else {
-						        $("#pubUnpubPost").addClass("btn-outline-success").removeClass("btn-outline-danger");
-						        $("#lemonDetailBlog").addClass("fa-regular").removeClass("fa-solid");
-                                $("#btnPostLikes-{{ post.id }}").addClass("d-none");
-                                $("#postOverview").addClass("postOverviewUnpub").removeClass("postOverviewPub");
-						    }
-						}
-
-						handlePublishDecoration();
-
-						$("#pubUnpubPost").click(function(e) {
-						    $.ajax({
-						        url: "{% url 'blog:publish' post.slug %}",
-						        type: "GET",
-						        data: {},
-						        cache: false,
-						        dataType: "json",
-						        success: function() {
-						            pubState = !pubState;
-						            handlePublishDecoration();
-						        },
-						        fail: function() {}
-						    });
-						});
-					</script>
-				</div>
-				{% endif %}
-				<div class="col-12">
-					<a href="{{ post.image.url }}" target="_blank"><img src="{{ post.image.url }}" alt="" id="postImage" class="mx-auto img-fluid"></a>
-				</div>
-				<div class="col-7 col-md-6 text-muted text-start mt-2">
-					<p>Posted by <a href="{% url 'account:profile' post.author.id %}">{{ post.author }}</a>.<br>
-						Posted on {{ post.pub_date }}.
-					</p>
-				</div>
-				<div class="col-5 col-md-6 text-end mt-2">
-					{% include './snippets/postLikes.html' %}
-				</div>
-				<div class="col-md-12 text-start my-2">
-					<p class="p-2" id="blogPostBody">{{ post.body|safe }}</p>
-				</div>
-				<div class="d-md-none col-12 mb-3">
-					<button class="btn btn-outline-info btn-sm w-100" id="togglePostComments">Show Comments</button>
-				</div>
-			</div>
-		</div>
-		<div class="col-12 col-md-5 mt-3 mt-md-0 d-md-block d-none" id="postComments">
-			<div class="commentsBody">
-				<h2>{{ post.count_all_comments }} comments</h2>
-				<div id="allComments">
+    <div class="row text-white m-3 px-3 py-2" id="postOverview">
+        <div class="col-12 col-md-7">
+            <div class="row align-items-center">
+                <div class="{% if post.author == request.user or request.user.is_superuser %}col-8 text-start{% else %}col-12 text-center{% endif %} p-2">
+                    <h2>{{ post.title }}</h2>
+                </div>
+                {% include './snippets/postModeration.html' %}
+                <div class="col-12">
+                    <a href="{{ post.image.url }}" target="_blank"><img src="{{ post.image.url }}" alt="" id="postImage" class="mx-auto img-fluid" /></a>
+                </div>
+                <div class="col-7 col-md-6 text-muted text-start mt-2">
+                    <p>
+                        Posted by <a href="{% url 'account:profile' post.author.id %}">{{ post.author }}</a>.<br>
+                        Posted on {{ post.pub_date }}
+                    </p>
+                </div>
+                <div class="col-5 col-md-6 text-end mt-2">{% include './snippets/postLikes.html' %}</div>
+                <div class="col-md-12 text-start my-2">
+                    <p class="p-2" id="blogPostBody">{{ post.body|safe }}</p>
+                </div>
+                <div class="d-md-none col-12 mb-3">
+                    <button class="btn btn-outline-info btn-sm w-100" id="togglePostComments">Show Comments</button>
+                </div>
+            </div>
+        </div>
+        <!-- ! COMMENTS -->
+        <div class="col-12 col-md-5 mt-3 mt-md-0 d-md-block d-none" id="postComments">
+            <div class="commentsBody">
+                <h2 id="commentCount">{{ post.count_all_comments }} comments</h2>
+                <div id="allComments">
                     {% for comment in comments %}
                     <div class="row m-2 comment" id="detailBlogComment-{{ comment.id }}">
                         <div class="col-md-8 text-start py-2 px-4">
-                            <a href="{% url 'account:profile' comment.author.id %}">{{ comment.author }}</a> says:
+                            <a href="{% url 'account:profile' comment.author.id %}">{{ comment.author }}</a>
+                            says:
                         </div>
                         <div class="col-md-4 text-end py-2 px-4" id="commentBlog-{{ comment.id }}">
                             {% if request.user.is_authenticated %}
                             {% include './snippets/commentLikes.html' %}
-                            {% else %}
-                            <p class="pr-3 pt-2" style="color: red;"><i class="fa-solid fa-heart"> {{ comment.likes }}</i></p>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.user == comment.author %}
+                            {% include './snippets/commentDelete.html' %}
                             {% endif %}
                         </div>
                         <div class="col-md-12">
@@ -105,25 +55,10 @@
                     </div>
                     {% endfor %}
                 </div>
-			</div>
-			{% if not request.user.is_authenticated %}
-			<div class="col-md-12 my-4 p-2" id="unauthenticatedComm">
-				<div class="commentsBody text-white text-center">
-					<p class="pt-2">You can not post comments as guest.</p>
-					<p class="pb-2">You can
-						<a class="commentLogReg" href="{% url 'account:login' %}">login</a>
-						if you have an account or
-						<a class="commentLogReg" href="{% url 'account:register' %}">register</a>
-						for one.
-					</p>
-				</div>
-			</div>
-			{% else %}
-                {% include './snippets/addComment.html' %}
-            {% endif %}
-		</div>
-	</div>
-</div>
+            </div>
+            {% include './snippets/postComment.html' %}
+        </div>
+    </div>
 </div>
 <script src="{% static 'scripts/post.js' %}"></script>
 {% endblock %}
