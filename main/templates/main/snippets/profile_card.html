@@ -20,9 +20,12 @@
 {% else %}
 <div class="profileCard unselectable text-center text-info">
     <div class="row p-2">
-        <div class="col-md-4 mt-1">Users:<p class="text-muted">{{ users.count }}</p></div>
-        <div class="col-md-4 mt-1">Comments:<p class="text-muted">{{ comments.count }}</p></div>
-        <div class="col-md-4 mt-1">Posts:<p class="text-muted">{{ pub_posts.count }}</p></div>
+        <div class="col-md-4 mt-1">Users:<p class="text-muted">{{ users.count }}</p>
+        </div>
+        <div class="col-md-4 mt-1">Comments:<p class="text-muted">{{ comments.count }}</p>
+        </div>
+        <div class="col-md-4 mt-1">Posts:<p class="text-muted">{{ posts.count }}</p>
+        </div>
         <div class="col-md-12 mb-1">
             Want to improve statistics?
             <a href="{% url 'account:login' %}" class="btn btn-outline-info btn-block my-2"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Log in</a>

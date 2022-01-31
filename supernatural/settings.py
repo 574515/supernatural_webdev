@@ -80,13 +80,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Europe/Paris'
 
-TIME_ZONE = 'CET'
+LANGUAGE_CODE = 'en-US'
+# LANGUAGE_CODE = 'hr-HR'
 
-USE_I18N = True
-
-USE_TZ = True
+USE_I18N = False
+DATE_FORMAT = "Y-m-d"
+USE_TZ = False
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),

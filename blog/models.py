@@ -4,8 +4,21 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
-
+from django.utils.timezone import now
+import datetime
 from account.models import Account
+from datetime import timezone, datetime, timedelta
+
+import json
+
+
+def json_default(value):
+    if isinstance(value, datetime.datetime):
+        return dict(year=value.year, month=value.month, day=value.day, hour=value.hour, minute=value.minute, second=value.second)
+    if isinstance(value, models.ForeignKey):
+        return dict(author_id=value.username)
+    else:
+        return value.__dict__
 
 
 def upload_location(instance, filename):
@@ -22,8 +35,8 @@ class BlogPost(models.Model):
     body                    = models.TextField(max_length=5000, null=False, blank=False)
     description             = models.TextField(max_length=300, null=False, blank=False)
     image                   = models.ImageField(upload_to=upload_location, null=False, blank=False)
-    pub_date                = models.DateTimeField(auto_now_add=True, verbose_name='Date published')
-    upd_date                = models.DateField(auto_now=True, verbose_name='Date updated')
+    pub_date                = models.DateTimeField(verbose_name='Date published', default=now)
+    upd_date                = models.DateTimeField(auto_now=True, verbose_name='Date updated')
     author                  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts_by_author')
     slug                    = models.SlugField(blank=True, unique=True)
     published               = models.BooleanField(default=False)
@@ -36,14 +49,25 @@ class BlogPost(models.Model):
     def count_published(self):
         return self.published.filter(published=False).count()
 
-    # def count_approved(self):
-    #     return self.comments.filter(approved=True).count()
-
-    # def count_unapproved(self):
-    #     return self.comments.filter(approved=False).count()
-
     def count_all_comments(self):
         return self.comments.count()
+
+    def toJSON(self):
+        return json.dumps(self, default=json_default, sort_keys=True)
+
+    def kakoGod(self):
+        return {
+            'title': self.title,
+            'body': self.body,
+            'description': self.description,
+            'image': str(self.image),
+            'pub_date': str(self.pub_date.strftime("%d.%m.%Y, %H:%M")),
+            'author_id': self.author.id,
+            'author': self.author.username,
+            'slug': str(self.slug),
+            'likes': self.likes,
+            'comments': self.count_all_comments(),
+        }
 
 
 @receiver(post_delete, sender=BlogPost)
@@ -72,18 +96,11 @@ class Comment(models.Model):
     text                    = models.TextField(blank=False, max_length=300)
     likes                   = models.PositiveIntegerField(default=0)
     userlikes               = models.ManyToManyField(Account, related_name='commlikes')
-    #approved                = models.BooleanField(default=False)
     created_at              = models.DateTimeField(auto_now_add=True)
     updated_at              = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
         return self.text[:80]
-
-    # def count_approved(self):
-    #     return self.comments.filter(approved=True).count()
-
-    # def count_unapproved(self):
-    #     return self.comments.filter(approved=False).count()
 
     def count(self):
         return self.comments.count()

@@ -1,347 +1,362 @@
 body {
-    background: url("../assets/bgImage.jpg") no-repeat center center fixed;
-    background-size: cover;
-    /* ! text-align: center;*/
-    height: 100vh;
-    font-family: cursive;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
+	background: url("../assets/bgImage.jpg") no-repeat center center fixed;
+	background-size: cover;
+	/* ! text-align: center;*/
+	height: 100vh;
+	font-family: cursive;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
 }
 
 .glow {
-    font-size: 6vw;
-    color: #0047ab;
-    text-align: center;
+	font-size: 6vw;
+	color: #0047ab;
+	text-align: center;
 }
 
 .col-1:hover {
-    animation: glow 1s ease-in-out infinite alternate;
+	animation: glow 1s ease-in-out infinite alternate;
 }
 
 .unselectable {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 @keyframes glow {
-    from {
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073,
-            0 0 20px #e60073, 0 0 25px #e60073, 0 0 30px #e60073,
-            0 0 35px #e60073;
-    }
-    to {
-        text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 15px #ff4da6,
-            0 0 20px #ff4da6, 0 0 25px #ff4da6, 0 0 30px #ff4da6,
-            0 0 35 px #ff4da6;
-    }
-    /* 0% { transform: skewX(-15deg); }
-    5% { transform: skewX(30deg); }
-    10% { transform: skewX(-30deg); }
-    15% { transform: skewX(15deg); }
-    20% { transform: skewX(0deg); }
-    100% { transform: skewX(0deg); } */
+	from {
+		text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073,
+			0 0 20px #e60073, 0 0 25px #e60073, 0 0 30px #e60073,
+			0 0 35px #e60073;
+	}
+	to {
+		text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 15px #ff4da6,
+			0 0 20px #ff4da6, 0 0 25px #ff4da6, 0 0 30px #ff4da6,
+			0 0 35 px #ff4da6;
+	}
+	/* 0% { transform: skewX(-15deg); }
+	5% { transform: skewX(30deg); }
+	10% { transform: skewX(-30deg); }
+	15% { transform: skewX(15deg); }
+	20% { transform: skewX(0deg); }
+	100% { transform: skewX(0deg); } */
 }
 
 .unauthorized-box {
-    background-color: rgba(255, 0, 0, 0.3);
-    border: 1px solid black;
-    border-radius: 25px;
-    color: white;
+	background-color: rgba(255, 0, 0, 0.3);
+	border: 1px solid black;
+	border-radius: 25px;
+	color: white;
 }
 
 .unauthorized-box a {
-    text-decoration: none;
-    color: darkblue;
+	text-decoration: none;
+	color: darkblue;
 }
 
 .unauthorized-box a:hover {
-    text-decoration: none;
-    color: blue;
+	text-decoration: none;
+	color: blue;
 }
 
 .profileCard {
-    border-radius: 25px;
-    background-color: #1e2833;
-    color: white;
-    box-shadow: 3px 3px 4px black;
-    text-align: left;
-    opacity: 75%;
+	border-radius: 25px;
+	background-color: #1e2833;
+	color: white;
+	box-shadow: 3px 3px 4px black;
+	text-align: left;
+	opacity: 75%;
 }
 
 .profileCard form .form-control,
 #accountEditProfile form .form-control {
-    background: none;
-    border: none;
-    border-bottom: 1px solid #434a52;
-    border-radius: 0;
-    box-shadow: none;
-    outline: none;
-    color: inherit;
+	background: none;
+	border: none;
+	border-bottom: 1px solid #434a52;
+	border-radius: 0;
+	box-shadow: none;
+	outline: none;
+	color: inherit;
 }
 
 .profileCard:hover {
-    opacity: 95%;
+	opacity: 95%;
 }
 
 /* ? ACCOUNT */
 .blogAccount {
-    border: 3px solid yellow;
+	border: 3px solid yellow;
 }
 
 .postAccountUnpublished {
-    border-radius: 25px;
-    background-color: rgba(139, 0, 0, 0.3);
-    color: white;
-    box-shadow: 3px 3px 4px black;
+	border-radius: 25px;
+	background-color: rgba(139, 0, 0, 0.3);
+	color: white;
+	box-shadow: 3px 3px 4px black;
 }
 
 .postAccountPublished {
-    border-radius: 25px;
-    background-color: rgba(0, 100, 0, 0.3);
-    color: white;
-    box-shadow: 3px 3px 4px black;
+	border-radius: 25px;
+	background-color: rgba(0, 100, 0, 0.3);
+	color: white;
+	box-shadow: 3px 3px 4px black;
 }
 
 .postAccount a {
-    text-decoration: none;
-    color: darkgrey;
+	text-decoration: none;
+	color: darkgrey;
 }
 
 .postAccount a:hover {
-    color: grey;
+	color: grey;
 }
 
 .accountPostTitle {
-    text-decoration: none;
-    color: darkblue;
-    text-shadow: 1px 1px 5px black;
+	text-decoration: none;
+	color: darkblue;
+	text-shadow: 1px 1px 5px black;
 }
 
 .accountPostTitle:hover {
-    color: blue;
-    text-shadow: 3px 3px 5px darkblue;
+	color: blue;
+	text-shadow: 3px 3px 5px darkblue;
 }
 
 #success_msg { display: none; }
 
 .commetnsOnAccount {
-    background-color: rgba(40, 40, 100, 0.3);
-    border: 1px solid rgba(0, 0, 150, 0.3);
-    border-radius: 25px;
-    box-shadow: 3px 3px 4px black;
-    
+	background-color: rgba(40, 40, 100, 0.3);
+	border: 1px solid rgba(0, 0, 150, 0.3);
+	border-radius: 25px;
+	box-shadow: 3px 3px 4px black;
+	
 }
 
 #resetDoneP {
-    text-align: justify;
+	text-align: justify;
 }
 
 #pwdList {
-    font-size: 0.8rem;
+	font-size: 0.8rem;
 }
 
 /* ? FOOTER */
 footer {
-    opacity: 75%;
+	opacity: 75%;
 }
 
 footer:hover {
-    opacity: 95%;
+	opacity: 95%;
 }
 
 .project a {
-    text-decoration: none;
-    color: darkgrey;
+	text-decoration: none;
+	color: darkgrey;
 }
 
 .project a:hover {
-    color: grey;
+	color: grey;
 }
 
 .content p.red {
-    color: red;
+	color: red;
 }
 
 #postImageAccount {
-    object-fit: cover;
-    object-position: top;
-    width: 90%;
-    max-height: 250px;
-    border: 1px solid darkred;
-    transition: transform 0.2s;
+	object-fit: cover;
+	object-position: top;
+	width: 90%;
+	max-height: 250px;
+	border: 1px solid darkred;
+	transition: transform 0.2s;
 }
 
 #postImageAccount:hover {
-    border: 1px solid red;
-    transform: scale(1.05);
+	border: 1px solid red;
+	transform: scale(1.05);
 }
 
 #postImage {
-    max-width: 100%;
-    max-height: 100%;
-    border: 1px solid darkblue;
-    transition: all 0.5s ease;
-    filter: blur(1.5px);
+	max-width: 100%;
+	max-height: 100%;
+	border: 1px solid darkblue;
+	transition: all 0.5s ease;
+	filter: blur(1.5px);
 }
 
 #postImage:hover {
-    transition: all 0.5s ease;
-    filter: blur(0);
+	transition: all 0.5s ease;
+	filter: blur(0);
 }
 
 .tab-pane {
-    background-color: rgba(30, 40, 51, 0.9);
-    color: #fff;
-    border-radius: 0 25px 25px 25px;
-    box-shadow: 1px 1px 3px darkblue;
+	background-color: rgba(30, 40, 51, 0.9);
+	color: #fff;
+	border-radius: 0 25px 25px 25px;
+	box-shadow: 1px 1px 3px darkblue;
 }
 
 #anon-normalUser {
-    background-color: rgba(30, 40, 51, 0.9);
-    color: #fff;
-    border-radius: 25px;
-    box-shadow: 1px 1px 3px darkblue;
+	background-color: rgba(30, 40, 51, 0.9);
+	color: #fff;
+	border-radius: 25px;
+	box-shadow: 1px 1px 3px darkblue;
 }
 
 #profileTab {
-    border: none;
+	border: none;
 }
 
 #profileTab .nav-link {
-    background-color: rgba(30, 40, 51, 0.7);
-    border: none;
-    color: blue;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+	background-color: rgba(30, 40, 51, 0.7);
+	border: none;
+	color: blue;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 }
 
 #profileTab .nav-link:hover {
-    box-shadow: none;
-    outline: none;
+	box-shadow: none;
+	outline: none;
 }
 
 #profileTab .nav-link.active {
-    background-color: rgba(30, 40, 51, 0.9);
-    text-shadow: 0 0 15px rgb(155, 135, 12, 0.9);
+	background-color: rgba(30, 40, 51, 0.9);
+	text-shadow: 0 0 15px rgb(155, 135, 12, 0.9);
 }
 
 .imagesIndex {
-    border: 2px solid darkblue;
-    border-radius: 25px;
-    background-color: rgba(50, 50, 120, 0.7);
+	border: 2px solid darkblue;
+	border-radius: 25px;
+	background-color: rgba(50, 50, 120, 0.7);
 }
 
 .comment {
-    background-color: rgba(1, 50, 32, 0.7);
-    border-radius: 25px;
-    box-shadow: 3px 3px 4px black;
+	background-color: rgba(1, 50, 32, 0.7);
+	border-radius: 25px;
+	box-shadow: 3px 3px 4px black;
 }
 
 #accountDesc {
-    transition: all 0.5s ease;
+	transition: all 0.5s ease;
 }
 
 #accountDesc:hover {
-    text-shadow: 10px 10px 5px black;
-    transition: all 0.5s ease;
-    animation: 0.8s shake infinite alternate;
-    animation-delay: 0.5s;
+	text-shadow: 10px 10px 5px black;
+	transition: all 0.5s ease;
+	animation: 0.8s shake infinite alternate;
+	animation-delay: 0.5s;
 }
 
 @keyframes shake {
-    0% {
-        transform: skewX(-15deg);
-    }
-    5% {
-        transform: skewX(15deg);
-    }
-    10% {
-        transform: skewX(-15deg);
-    }
-    15% {
-        transform: skewX(15deg);
-    }
-    20% {
-        transform: skewX(0deg);
-    }
-    100% {
-        transform: skewX(0deg);
-    }
+	0% {
+		transform: skewX(-15deg);
+	}
+	5% {
+		transform: skewX(15deg);
+	}
+	10% {
+		transform: skewX(-15deg);
+	}
+	15% {
+		transform: skewX(15deg);
+	}
+	20% {
+		transform: skewX(0deg);
+	}
+	100% {
+		transform: skewX(0deg);
+	}
 }
 
 .postOverviewPub {
-    background-color: rgba(20, 20, 30, 0.8);
-    border-radius: 25px;
-    box-shadow: 3px 3px 4px black;
+	background-color: rgba(20, 20, 30, 0.8);
+	border-radius: 25px;
+	box-shadow: 3px 3px 4px black;
 }
 
 .postOverviewUnpub {
-    background-color: rgba(30, 20, 20, 0.8);
-    border-radius: 25px;
-    box-shadow: 3px 3px 4px black;
+	background-color: rgba(30, 20, 20, 0.8);
+	border-radius: 25px;
+	box-shadow: 3px 3px 4px black;
 }
 
 #unauthenticatedComm {
-    border: 1px solid rgb(59, 11, 114);
-    border-radius: 25px;
-    background-color: rgba(30, 40, 51, 0.8);
-    box-shadow: 3px 3px 4px black;
+	border: 1px solid rgb(59, 11, 114);
+	border-radius: 25px;
+	background-color: rgba(30, 40, 51, 0.8);
+	box-shadow: 3px 3px 4px black;
 }
 
 #blogPostBody {
-    border: 1px solid rgb(59, 11, 114);
-    border-radius: 5px;
-    background-color: rgba(0, 0, 60, 0.8);
-    box-shadow: 1px 1px 3px darkblue;
+    color: white;
+	border: 1px solid rgb(59, 11, 114);
+	border-radius: 5px;
+	background-color: rgba(0, 0, 60, 0.8);
+	box-shadow: 1px 1px 3px darkblue;
 }
 
 textarea {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 90%;
-    max-height: 280px;
-    min-height: 130px;
-    background-color: rgba(3, 19, 36, 0.8);
-    border: 1px dotted rgb(59, 11, 114);
-    border-radius: 0;
-    box-shadow: none;
-    outline: none;
-    color: white;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 90%;
+	max-height: 280px;
+	min-height: 130px;
+	background-color: rgba(3, 19, 36, 0.8);
+	border: 1px dotted rgb(59, 11, 114);
+	border-radius: 0;
+	box-shadow: none;
+	outline: none;
+	color: white;
 }
 
 #mustAuthenticate {
-    max-width: 350px;
-    background-color: rgba(50, 0, 0, 0.7);
-    padding: 3%;
-    border-radius: 15px;
-    margin: auto;
-    color: #fff;
-    box-shadow: 3px 3px 4px black;
-    font-family: 'Times New Roman', Times, serif;
+	max-width: 350px;
+	background-color: rgba(50, 0, 0, 0.7);
+	padding: 3%;
+	border-radius: 15px;
+	margin: auto;
+	color: #fff;
+	box-shadow: 3px 3px 4px black;
+	font-family: 'Times New Roman', Times, serif;
 }
 
 #mustAuthenticate h2 {
-    color: red;
-    text-shadow: 1px 1px 5px darkblue;
+	color: red;
+	text-shadow: 1px 1px 5px darkblue;
 }
 
 #mustAuthenticate:hover {
-    background-color: rgba(50, 0, 0, 0.9);
+	background-color: rgba(50, 0, 0, 0.9);
 }
 
 @media (max-width: 768px) {
-    .ma-full-width {
-        width: 100%;
-        margin: 2% 0;
-    }
+	.ma-full-width {
+		width: 100%;
+		margin: 2% 0;
+	}
 }
 
 .limitedTweets::placeholder {
-    color: red;
+	color: red;
+}
+
+#sortBy {
+	background-color: rgba(30, 30, 100, 0.6);
+	color: darkgrey;	
+	font-size: inherit;
+	overflow: hidden;
+	outline: none;
+	border: 1px solid rgba(30, 30, 100, 1);
+	border-radius: 5px;
+}
+
+.sbopt {
+	background-color: rgba(30, 30, 100, 1);
 }

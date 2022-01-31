@@ -3,7 +3,7 @@ from django.contrib import admin
 from blog.models import BlogPost, Comment
 
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'pub_date', 'upd_date', 'author', 'likes', 'published')
+    list_display = ('title', 'pub_date', 'upd_date', 'author', 'likes', 'published', 'count_all_comments')
     search_fields = ('author', 'title')
     readonly_fields = ('likes', 'userlikes', 'pub_date', 'upd_date', 'slug')
     actions = [
@@ -28,19 +28,6 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('text', 'created_at', 'likes', 'author') #, 'approved'
     search_fields = ('author', 'text')
     readonly_fields = ('likes', 'userlikes',)
-    # actions = [
-    #     'approve_comments', 'disapprove_comments',
-    # ]
-
-    # def approve_comments(self, request, queryset):
-    #     cnt = queryset.filter(approved=False).update(approved=True)
-    #     self.message_user(request, 'Approved {} comments.'.format(cnt))
-    # approve_comments.short_description = 'Approve Comments'
-
-    # def disapprove_comments(self, request, queryset):
-    #     cnt = queryset.filter(approved=True).update(approved=False)
-    #     self.message_user(request, 'Disapproved {} comments.'.format(cnt))
-    # disapprove_comments.short_description = 'Disapprove Comments'
 
     filter_horizontal = ()
     list_filter = ('created_at', 'updated_at',) # 'approved',

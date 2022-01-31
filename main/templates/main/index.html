@@ -3,13 +3,150 @@
 <div class="col-lg-3 d-none d-lg-block">
     {% include './snippets/profile_card.html' %}
 </div>
-<div class="col-12 col-md-9 col-lg-6 unselectable p-4" style="background-color: rgba(20, 20, 20, 0.6); border-radius: 25px;">
-    <h3 class="mx-auto text-center">Blog posts?</h3>    
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "{% url 'index' %}",
+            type: "POST",
+            data: {
+                'value': $("#sortBy option:selected").val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                var num_of_posts = data[data.length - 2];
+                var post = jQuery.parseJSON(data);
+
+                for (i = 0; i < num_of_posts; i++) {
+                    $("#postoviNeZnam").append(
+                        "<div class=\"col-12 px-3 py-2 my-2 postOverview postOverviewPub\">" +
+                        "<div class=\"col-12 text-center p-2\">" +
+                        "<h2>" + post[i]['title'] + "</h2>" +
+                        "<div class=\"row\">" +
+                        "<div class=\"col-12 col-md-6\">" +
+                        "<img src=\"/media/" + post[i]['image'] + "\" alt=\"\" id=\"postImage\" class=\"mx-auto img-fluid rounded\">" +
+                        "</div>" +
+                        "<div class=\"col-12 my-2 my-md-0 col-md-6 text-start\">" +
+                        "<p class=\"p-2\" id=\"blogPostBody\">" + post[i]['description'] + "</p>" +
+                        "<p class=\"text-muted\">Posted by " +
+                        "<a href=\"/profile/" + post[i]['author_id'] + "\">" + post[i]['author'] + "</a>.<br>" +
+                        "Posted on " + post[i]['pub_date'] + "." +
+                        "</p>" +
+                        "</div>" +
+                        "</div>" +
+                        "<div class=\"row col-12 col-md-6 align-items-center\">" +
+                        "<div class=\"col-12 col-md-7 text-center ps-4 ps-md-3 py-2 my-2\">" +
+                        "<button class=\"btn btn-outline-danger btn-sm disabled\">" +
+                        "<i class=\"fa-solid fa-heart\"></i>&nbsp;&nbsp; " + post[i]['likes'] +
+                        "</button>&nbsp;" +
+                        "<button class=\"btn btn-outline-info btn-sm disabled\">" +
+                        "<i class=\"fa-solid fa-comments\"></i>&nbsp;&nbsp; " + post[i]['comments'] +
+                        "</button>" +
+                        "</div>" +
+                        "<div class=\"col-12 col-md-5 text-center ps-4 ps-md-3 py-2 my-2\">" +
+                        "<a href=\"/blog/" + post[i]['slug'] + "\" class=\" w-100 btn btn-outline-info btn-sm\">" +
+                        "<i class=\"fa-solid fa-book-open\"></i>&nbsp;&nbsp;Read" +
+                        "</a>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>"
+                    );
+                }
+            },
+            fail: function () { },
+            error: function (data) {
+                console.log("ERROR");
+            }
+        });
+    });
+</script>
+<div class="col-12 my-3 m-md-0 col-md-9 col-lg-6 unselectable p-4" style="background-color: rgba(20, 20, 20, 0.6); border-radius: 25px;">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-8">
+            <h2>Blog Posts</h2>
+        </div>
+        <div class="col-12 col-md-4 mx-auto mx-md-none">
+            <select name="sortby" id="sortBy" class="p-1 w-100">
+                <option class="sbopt" value="1" selected>Default</option>
+                <option class="sbopt" value="2">Most comments</option>
+                <option class="sbopt" value="3">Least comments</option>
+                <option class="sbopt" value="4">Most likes</option>
+                <option class="sbopt" value="5">Least likes</option>
+            </select>
+            <script>
+                $("#sortBy").on("change", function () {
+                    $.ajax({
+                        url: "{% url 'index' %}",
+                        type: "POST",
+                        data: {
+                            'value': $("#sortBy option:selected").val(),
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        cache: false,
+                        dataType: "json",
+                        success: function (data) {
+                            var num_of_posts = data[data.length - 2];
+                            var post = jQuery.parseJSON(data);
+                            $("#postoviNeZnam").html("");
+                            for (i = 0; i < num_of_posts; i++) {
+                                $("#postoviNeZnam").append(
+                                    "<div class=\"col-12 px-3 py-2 my-2 postOverview postOverviewPub\">" +
+                                    "<div class=\"row\">" +
+                                    "<div class=\"col-12 text-center p-2\">" +
+                                    "<h2>" + post[i]['title'] + "</h2>" +
+                                    "</div>" +
+                                    "<div class=\"row\">" +
+                                    "<div class=\"col-6\">" +
+                                    "<img src=\"/media/" + post[i]['image'] + "\" alt=\"\" class=\"mx-auto img-fluid\">" +
+                                    "</div>" +
+                                    "<div class=\"col-6 text-start\">" +
+                                    "<p class=\"p-2\">" + post[i]['description'] + "</p>" +
+                                    "<p class=\"text-muted\">Posted by" +
+                                    "<a href=\"/profile/" + post[i]['author_id'] + "\">" + post[i]['author'] + "</a>.<br>" +
+                                    "Posted on " + post[i]['pub_date'] + "." +
+                                    "</p>" +
+                                    "</div>" +
+                                    "</div>" +
+                                    "<div class=\"row col-6 align-items-center\">" +
+                                    "<div class=\"col-7 text-start ps-4 py-2 my-2\">" +
+                                    "<button class=\"btn btn-outline-danger btn-sm disabled\">" +
+                                    "<i class=\"fa-solid fa-heart\"></i>&nbsp;&nbsp; " + post[i]['likes'] +
+                                    "</button>&nbsp;" +
+                                    "<button class=\"btn btn-outline-info btn-sm disabled\">" +
+                                    "<i class=\"fa-solid fa-comments\"></i>&nbsp;&nbsp; " + post[i]['comments'] +
+                                    "</button>" +
+                                    "</div>" +
+                                    "<div class=\"col-5 text-start ps-4 py-2 my-2\">" +
+                                    "<a href=\"/blog/" + post[i]['slug'] + "\" class=\"btn btn-outline-info btn-sm\">" +
+                                    "<i class=\"fa-solid fa-book-open\"></i>&nbsp;&nbsp;Read" +
+                                    "</a>" +
+                                    "</div>" +
+                                    "</div>" +
+                                    "</div>" +
+                                    "</div>"
+                                )
+                            }
+                        },
+                        fail: function () { },
+                        error: function (data) {
+                            console.log("ERROR");
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    <div class="row" id="postoviNeZnam">
+
+    </div>
+
 </div>
 <div class="d-none d-md-flex col-md-3 col-lg-3 col-sm-2 unselectable text-white">
     <div class="row">
-        <div class="col-12 p-3 text-center">    
-            <button class="btn btn-outline-danger btn-sm w-100" id="turnOffTweets">Turn off Tweets</button>     
+        <div class="col-12 p-3 text-center">
+            <button class="btn btn-outline-danger btn-sm w-100" id="turnOffTweets">Turn off Tweets</button>
             <div class="input-group my-2">
                 <div class="input-group-text">
                     <input class="form-check-input mt-0" type="checkbox" value="" id="limitTweetsCb">
@@ -18,16 +155,7 @@
             </div>
         </div>
         <div class="col-12">
-            <a
-            class="twitter-timeline"
-            data-dnt="true"
-            data-lang="en"
-            data-height="100vh"
-            data-theme="dark"
-            data-tweet-limit="3"
-            href="https://twitter.com/cw_spn?ref_src=twsrc%5Etfw"
-            id="tweetsHolder" 
-            >Tweets by cw_spn</a>
+            <a class="twitter-timeline" data-dnt="true" data-lang="en" data-height="100vh" data-theme="dark" data-tweet-limit="3" href="https://twitter.com/cw_spn?ref_src=twsrc%5Etfw" id="tweetsHolder">Tweets by cw_spn</a>
             <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         </div>
     </div>
@@ -35,26 +163,26 @@
 <script>
 
 
-$(document).ready(function() {
+    $(document).ready(function () {
 
-    $('#limitTweetsCb').change(function(e) {
-        if(this.checked) {
-            let numOfTw = $("#limitTweets").val();
-            if (numOfTw == "" || numOfTw < 1 || numOfTw > 99) $("#limitTweets").prop("placeholder", "Enter a number").addClass("limitedTweets");
-            else {
+        $('#limitTweetsCb').change(function (e) {
+            if (this.checked) {
+                let numOfTw = $("#limitTweets").val();
+                if (numOfTw == "" || numOfTw < 1 || numOfTw > 99) $("#limitTweets").prop("placeholder", "Enter a number").addClass("limitedTweets");
+                else {
 
-                var abc = $("#tweetsHolder");
-                console.log(abc);
+                    var abc = $("#tweetsHolder");
+                    console.log(abc);
 
-                console.log($('#tweetsHolder').attr('data-tweet-limit'));            
+                    console.log($('#tweetsHolder').attr('data-tweet-limit'));
+                }
             }
-        }
-        else {
-            $("#limitTweets").prop("placeholder", "Limit number of tweets").removeClass("limitedTweets");
-        }
-    });
+            else {
+                $("#limitTweets").prop("placeholder", "Limit number of tweets").removeClass("limitedTweets");
+            }
+        });
 
-});
+    });
 
 
 </script>

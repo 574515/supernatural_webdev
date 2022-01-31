@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -56,3 +57,6 @@ class Account(AbstractBaseUser):
 
 	def has_module_perms(self, app_label):
 		return True
+
+	def toJSON(self):
+		return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True)
