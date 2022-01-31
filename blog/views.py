@@ -15,7 +15,8 @@ def BlogIndexView(request):
 	context = {}
 	user = request.user
 	all_posts = BlogPost.objects.all()
-	pub_posts = BlogPost.objects.filter(published=True).all()
+	pub_posts = BlogPost.objects.filter(published=True).order_by('-pub_date').all()
+	unpub_posts = BlogPost.objects.filter(published=False).all()
 	comments = Comment.objects.all()
 
 	if all_posts:
@@ -40,13 +41,15 @@ def BlogIndexView(request):
 	if user_has_posts:
 		unpub_withauth = BlogPost.objects.filter(author=user).all()
 
-	if user.is_superuser:
-		context['posts'] = all_posts
-	elif user.is_authenticated and user_has_posts:
-		context['posts'] = unpub_withauth
-	else:
-		context['posts'] = pub_posts
-
+	# if user.is_superuser:
+	# 	context['posts'] = all_posts
+	# elif user.is_authenticated and user_has_posts:
+	# 	context['posts'] = unpub_withauth
+	# else:
+	# 	context['posts'] = pub_posts
+	context['posts'] = all_posts
+	context['unpub_posts'] = unpub_posts
+	context['pub_posts'] = pub_posts
 	context['comments'] = comments
 	context['navbar'] = 'blogindex'
 	context['users'] = users
@@ -160,7 +163,7 @@ def PublishPostView(request, slug):
 			post.published = False
 			post.save()
 			
-	return HttpResponse(json.dumps({"good": True}), content_type="application/json")
+	return HttpResponse(json.dumps({"good": True, "slug": slug}), content_type="application/json")
 
 
 
@@ -220,7 +223,7 @@ def PostLikesView(request, post_id):
 		return HttpResponse(json.dumps({"good": True}), content_type="application/json")
 
 
-def DeleteCommentView(request):
+def delete_comment_view(request):
 	if request.method == "POST":
 		id = request.POST.get('id', None)
 		Comment.objects.get(pk=id).delete()

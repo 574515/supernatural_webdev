@@ -1,18 +1,23 @@
 {% extends 'main/base.html' %}
+{% load static %}
+
 <head>
     <title>{% block title %}You Are Not Authenticated{% endblock %}</title>
 </head>
 {% block content %}
-<div class="container-fluid unselectable">
-    <div class="row col-12 col-lg-6 p-3 p-lg-0 my-4 my-lg-0 mx-auto mustAuthenticate text-white text-center">
-        <div class="col-12">
-            <h2 class="pt-2">You are not allowed to do that!</h2>
-        </div>
-        <div class="col-12 p-3 mb-2">
-            <p>You can login, sign up or browse the site.</p>
-            <a class="btn btn-outline-info btn-sm ma-full-width" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Login</a>
-            <a class="btn btn-outline-info btn-sm ma-full-width" href="{% url 'account:register' %}"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Sign Up</a>
-            <a class="btn btn-outline-info btn-sm ma-full-width" href="{% url 'index' %}"><i class="fas fa-ghost"></i>&nbsp;&nbsp;Home</a>
+<div class="container-fluid loginregister-dark my-3 unselectable">
+    <div class="row">
+        <div class="col-md-12">
+            <form id="mustAuthenticate">
+                <img src="{% static '/assets/mustAuthLuci.gif' %}" class="img-fluid rounded mb-3" alt="Gif" id="gif">
+                <h2 class="pt-2">You are not allowed to do that!</h2>
+                <div class="form-group bttns mt-2">
+                    <p>You can login, sign up or browse the site.</p>
+                    <a class="btn btn-outline-info btn-sm ma-full-width" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Login</a>
+                    <a class="btn btn-outline-info btn-sm ma-full-width" href="{% url 'account:register' %}"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Sign Up</a>
+                    <a class="btn btn-outline-info btn-sm ma-full-width" href="{% url 'index' %}"><i class="fas fa-ghost"></i>&nbsp;&nbsp;Home</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

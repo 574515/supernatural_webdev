@@ -1,4 +1,5 @@
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +15,7 @@
     <link rel="shortcut icon" type="image/png" href="{% static '/assets/favIco.ico' %}">
     <title>{% block title %}Welcome to Supernatural{% endblock %}</title>
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark unselectable py-1">
@@ -63,10 +65,10 @@
                     <ul class="navbar-nav ms-auto">
                         {% if not request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a href="{% url 'account:login' %}" class="nav-item nav-link"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Log in</a>
+                            <a href="{% url 'account:login' %}" class="nav-item nav-link {% if navbar == 'login' %}active{% endif %}"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Log in</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'account:register' %}" class="nav-item nav-link"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Sign Up</a>
+                            <a href="{% url 'account:register' %}" class="nav-item nav-link {% if navbar == 'register' %}active{% endif %}"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Sign Up</a>
                         </li>
                         {% else %}
                         <li class="nav-item dropdown">
@@ -81,7 +83,7 @@
                                 <a href="{% url 'admin:index' %}" target="_blank" class="dropdown-item">
                                     <i class="fas fa-utensils"></i>&nbsp;&nbsp;Admin panel
                                 </a>
-                                {% endif %} 
+                                {% endif %}
                             </ul>
                         </li>
                         {% endif %}
@@ -96,30 +98,54 @@
                 <div class="container">
                     <div class="d-none d-sm-block align-items-center justify-content-between">
                         <div class="row" id="snlogo">
-                            <span class="col-1 unselectable" id="s_top"><h1 class="glow">S</h1></span>
-                            <span class="col-1 unselectable" id="u1_top"><h1 class="glow">U</h1></span>
-                            <span class="col-1 unselectable" id="p_top"><h1 class="glow">P</h1></span>
-                            <span class="col-1 unselectable" id="e_top"><h1 class="glow">E</h1></span>
-                            <span class="col-1 unselectable" id="r1_top"><h1 class="glow">R</h1></span>
-                            <span class="col-1 unselectable" id="n_top"><h1 class="glow">N</h1></span>
-                            <span class="col-1 unselectable" id="a1_top"><h1 class="glow">A</h1></span>
-                            <span class="col-1 unselectable" id="t_top"><h1 class="glow">T</h1></span>
-                            <span class="col-1 unselectable" id="u2_top"><h1 class="glow">U</h1></span>
-                            <span class="col-1 unselectable" id="r2_top"><h1 class="glow">R</h1></span>
-                            <span class="col-1 unselectable" id="a2_top"><h1 class="glow">A</h1></span>
-                            <span class="col-1 unselectable" id="l_top"><h1 class="glow">L</h1></span>
+                            <span class="col-1 unselectable" id="s_top">
+                                <h1 class="glow">S</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="u1_top">
+                                <h1 class="glow">U</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="p_top">
+                                <h1 class="glow">P</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="e_top">
+                                <h1 class="glow">E</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="r1_top">
+                                <h1 class="glow">R</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="n_top">
+                                <h1 class="glow">N</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="a1_top">
+                                <h1 class="glow">A</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="t_top">
+                                <h1 class="glow">T</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="u2_top">
+                                <h1 class="glow">U</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="r2_top">
+                                <h1 class="glow">R</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="a2_top">
+                                <h1 class="glow">A</h1>
+                            </span>
+                            <span class="col-1 unselectable" id="l_top">
+                                <h1 class="glow">L</h1>
+                            </span>
                         </div>
-                    </div>       
+                    </div>
                 </div>
-            </section>            
-            <div class="row">                
+            </section>
+            <div class="row">
                 {% block content %}
                 {% endblock %}
             </div>
         </div>
     </main>
     <script src="{% static '/scripts/index.js' %}"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"></script>    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"></script>
     <footer class="bg-dark text-center text-white mt-3 unselectable sticky-bottom">
         {% include 'main/footer.html' %}
     </footer>

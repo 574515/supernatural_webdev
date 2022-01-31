@@ -14,7 +14,7 @@
         </div>
     </div>
     {% endif %}
-    <div class="{% if request.user.is_authenticated %}col-3{% else %}col-4{% endif %} p-3 mx-auto text-start profileCard">
+    <div class="col-4 p-3 mx-auto text-start profileCard">
         <div class="row px-3">
             <div class="col-md-12">Number of posts: <span class="text-muted">{{ posts.count }}</span></div>
             <div class="col-md-12">Number of comments: <span class="mt-1 text-muted">{{ comments.count }}</span></div>
@@ -22,16 +22,16 @@
             <div class="col-md-12">Last comment: <span class="mt-1 text-muted">{% if last_comment %}{{ last_comment.created_at }}{% else %}-{% endif %}</span></div>
             <div class="col-12 mt-3 mb-1 mx-auto text-center">
                 {% if request.user.is_authenticated %}
-                    <form style="display: inline;" action="{% url 'blog:create' %}" method="post">
-                        {% csrf_token %}
-                        <button class="btn btn-outline-light btn-sm" type="submit" name="edit" id="btnEdit">
-                            <i class="fa-solid fa-mug-hot"></i>&nbsp;&nbsp;Make New Post
-                        </button>
-                    </form>
+                <form style="display: inline;" action="{% url 'blog:create' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-light btn-sm" type="submit" name="edit" id="btnEdit">
+                        <i class="fa-solid fa-mug-hot"></i>&nbsp;&nbsp;Make New Post
+                    </button>
+                </form>
                 {% else %}
-                    <a href="{% url 'account:login' %}" class="btn btn-outline-success btn-block">
-                        <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;I have an account
-                    </a>
+                <a href="{% url 'account:login' %}" class="btn btn-outline-success btn-block">
+                    <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;I have an account
+                </a>
                 {% endif %}
             </div>
         </div>
@@ -44,13 +44,13 @@
             <div class="col-md-12">Last join: <span class="mt-1 text-muted">{{ last_joined.date_joined }}</span></div>
             <div class="col-12 mt-3 mb-1 mx-auto text-center">
                 {% if request.user.is_authenticated %}
-                    <a href="{% url 'account:logout' %}" class="btn btn-outline-danger btn-sm">
-                        <i class="fas fa-drumstick-bite"></i>&nbsp;&nbsp;Logout
-                    </a>
+                <a href="{% url 'account:logout' %}" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-drumstick-bite"></i>&nbsp;&nbsp;Logout
+                </a>
                 {% else %}
-                    <a href="{% url 'account:register' %}" class="btn btn-outline-warning btn-block">
-                        <i class="fas fa-user-plus"></i>&nbsp;&nbsp;I wannt an account
-                    </a>
+                <a href="{% url 'account:register' %}" class="btn btn-outline-warning btn-block">
+                    <i class="fas fa-user-plus"></i>&nbsp;&nbsp;I wannt an account
+                </a>
                 {% endif %}
             </div>
         </div>

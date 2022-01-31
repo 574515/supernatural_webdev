@@ -4,31 +4,19 @@
             <label for="isAdmin" class="text-muted px-1">{{ currUser }} is admin</label>
         </div>
         <div class="col-2">
-            {% if currUser.is_admin %}
-                <i class="fa-solid fa-circle-check text-success"></i>
-            {% else %}
-                <i class="fa-solid fa-circle-xmark text-danger"></i>
-            {% endif %}
+            <i class="fa-solid fa-circle-{% if currUser.is_admin %}check text-success{% else %}xmark text-danger{% endif %}"></i>
         </div>
         <div class="col-10">
             <label for="isStaff" class="text-muted px-1">{{ currUser }} is staff</label>
         </div>
         <div class="col-2">
-            {% if currUser.is_staff %}
-                <i class="fa-solid fa-circle-check text-success"></i>
-            {% else %}
-                <i class="fa-solid fa-circle-xmark text-danger"></i>
-            {% endif %}
+            <i class="fa-solid fa-circle-{% if currUser.is_admin %}check text-success{% else %}xmark text-danger{% endif %}"></i>
         </div>
         <div class="col-10">
             <label for="isSuperuser" class="text-muted px-1">{{ currUser }} is superuser</label>
         </div>
         <div class="col-2">
-            {% if currUser.is_superuser %}
-                <i class="fa-solid fa-circle-check text-success"></i>
-            {% else %}
-                <i class="fa-solid fa-circle-xmark text-danger"></i>
-            {% endif %}
+            <i class="fa-solid fa-circle-{% if currUser.is_admin %}check text-success{% else %}xmark text-danger{% endif %}"></i>
         </div>
     </div>
 </div>

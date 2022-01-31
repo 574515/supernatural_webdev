@@ -1,98 +1,109 @@
 {% extends 'main/base.html' %}
 {% load static %}
+
 <head>
-	<title>{% block title %}Supernatural Blog{% endblock %}</title>
+    <title>{% block title %}Supernatural Blog{% endblock %}</title>
 </head>
 {% block content %}
 <div class="container-fluid unselectable">
-    <div class="row text-white m-3 px-3 py-2">		
+    <div class="row text-white m-3 px-3 py-2">
         <div class="col-md-12 px-3 py-2">
             {% include './snippets/profile_card.html' %}
         </div>
-        {% if posts %}
-        <script>
-            let getState = "{{ post.published }}", pubState;
-            getState == "True" ? pubState = true : pubState = false;
-        </script>
         {% for post in posts %}
-		<div class="col-12 px-3 py-2 postOverview" id="postOverview-{{ post.id }}">
-			<div class="row">
-				<div class="col-12 text-center p-2">
-					<h2>{{ post.title }}</h2>
-				</div>
+        <div class="col-12 px-3 py-2 my-2 postOverview {% if post.published %}postOverviewPub{% else %}postOverviewUnpub{% endif %}" id="{{ post.slug }}">
+            <div class="row">
+                <div class="col-12 text-center p-2">
+                    <h2>{{ post.title }}</h2>
+                </div>
                 <div class="row">
-				    <div class="col-6">
-					    <img src="{{ post.image.url }}" alt="" id="postImage" class="mx-auto img-fluid">
-				    </div>
-				    <div class="col-6 text-start">
-					    <p class="p-2" id="blogPostBody">{{ post.description|safe }}</p>     
+                    <div class="col-6">
+                        <img src="{{ post.image.url }}" alt="" id="postImage" class="mx-auto img-fluid">
+                    </div>
+                    <div class="col-6 text-start">
+                        <p class="p-2" id="blogPostBody">{{ post.description|safe }}</p>
                         <p class="text-muted">Posted by <a href="{% url 'account:profile' post.author.id %}">{{ post.author }}</a>.<br>
                             Posted on {{ post.pub_date }}.
                         </p>
-				    </div>
+                    </div>
                 </div>
                 <div class="row col-6 align-items-center">
-				    <div class="col-6 text-start ps-4 py-2 my-2">
-					    <button class="btn btn-outline-danger btn-sm{% if not post.published %} d-none{% endif %}" id="btnPostLikes-{{ post.id }}" disabled>
+                    <div class="col-6 text-start ps-4 py-2 my-2">
+                        <button class="btn btn-outline-danger btn-sm{% if not post.published %} d-none{% endif %}" id="btnPostLikes-{{ post.slug }}" disabled>
                             <i class="fa-solid fa-heart"></i>&nbsp;&nbsp;{{ post.likes }}
                         </button>
-                        <a href="{% url 'blog:detail' post.slug %}" class="btn btn-outline-info btn-sm" id="readMoreBtn-{{ post.id }}">
+                        <a href="{% url 'blog:detail' post.slug %}" class="btn btn-outline-info btn-sm" id="readMoreBtn-{{ post.slug }}">
                             <i class="fa-solid fa-book-open"></i>&nbsp;&nbsp;Read more
                         </a>
                     </div>
                     <div class="col-6 text-end py-2 my-2">
                         {% if post.author == request.user or request.user.is_superuser %}
-                        <button type="submit" class="btn btn-outline-success btn-sm" id="pubUnpubPost">
-                            <i class="fa-regular fa-lemon" id="lemonDetailBlog"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan">Publish</span>
+                        <button class="btn btn-outline-warning btn-sm" id="pubUnpubPost-{{ post.slug }}">
+                            <i class="fa-regular fa-lemon" id="lemonDetailBlog-{{ post.slug }}"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan-{{ post.slug }}">Publish</span>
                         </button>
-                        <script>
-    
-                            pubState ? 
-                            $("#postOverview-{{ post.id }}").addClass("postOverviewPub").removeClass("postOverviewUnpub") : 
-                            $("#postOverview-{{ post.id }}").addClass("postOverviewUnpub").removeClass("postOverviewPub");
-    
-                            function handlePublishDecoration() {
-                                $("#pubUnpubPostSpan").html(pubState == true ? "Unpublish" : "Publish");
-                                if (pubState == true) {
-                                    $("#pubUnpubPost").addClass("btn-outline-danger").removeClass("btn-outline-success");
-                                    $("#lemonDetailBlog").addClass("fa-solid").removeClass("fa-regular");
-                                    $("#btnPostLikes-{{ post.id }}").removeClass("d-none");
-                                    $("#readMoreBtn-{{ post.id }}").removeClass("d-none");
-                                    $("#postOverview-{{ post.id }}").addClass("postOverviewPub").removeClass("postOverviewUnpub")
-                                }
-                                else {
-                                    $("#pubUnpubPost").addClass("btn-outline-success").removeClass("btn-outline-danger");
-                                    $("#lemonDetailBlog").addClass("fa-regular").removeClass("fa-solid");
-                                    $("#btnPostLikes-{{ post.id }}").addClass("d-none");
-                                    $("#readMoreBtn-{{ post.id }}").addClass("d-none");
-                                    $("#postOverview-{{ post.id }}").addClass("postOverviewUnpub").removeClass("postOverviewPub");
-                                }
-                            }
-    
-                            handlePublishDecoration();
-    
-                            $("#pubUnpubPost").click(function(e) {
-                                $.ajax({
-                                    url: "{% url 'blog:publish' post.slug %}",
-                                    type: "GET",
-                                    data: {},
-                                    cache: false,
-                                    dataType: "json",
-                                    success: function() {
-                                        pubState = !pubState;
-                                        handlePublishDecoration();
-                                    },
-                                    fail: function() {}
-                                });
-                            });
-                        </script>
                         {% endif %}
-				    </div>
+                    </div>
                 </div>
-			</div>
-		</div>
+            </div>
+        </div>
         {% endfor %}
-        {% endif %}
-	</div>
+    </div>
 </div>
+<script>
+    $(document).ready(function () {
+        const posts = $(".postOverview");
+        // postOverviewUnpub postOverviewPub
+        var states = new Map();
+        posts.each(function (index) {
+            let element = posts.get(index);
+            let slug = element.id;
+            let pubState = element.classList.contains("postOverviewPub");
+            states.set(slug, element.classList.contains("postOverviewPub"));
+            $("#pubUnpubPost-" + slug).on("click", {
+                "slug": slug
+            }, sendAjax);
+            handlePublishDecoration(slug, pubState);
+        })
+
+        function handlePublishDecoration(slug, pubState) {
+            $("#pubUnpubPostSpan-" + slug).html(pubState == true ? "Unpublish" : "Publish");
+            if (pubState == true) {
+                $("#unpubModal-" + slug).addClass("d-none");
+                $("#pubUnpubPost-" + slug).addClass("btn-outline-danger").removeClass("btn-outline-success");
+                $("#lemonDetailBlog-" + slug).addClass("fa-solid").removeClass("fa-regular");
+                $("#btnPostLikes-" + slug).removeClass("d-none");
+                $("#readMoreBtn-" + slug).removeClass("d-none");
+                $("#" + slug).addClass("postOverviewPub").removeClass("postOverviewUnpub")
+            }
+            else {
+                $("#unpubModal-" + slug).removeClass("d-none");
+                $("#pubUnpubPost-" + slug).addClass("btn-outline-success").removeClass("btn-outline-danger");
+                $("#lemonDetailBlog-" + slug).addClass("fa-regular").removeClass("fa-solid");
+                $("#btnPostLikes-" + slug).addClass("d-none");
+                $("#readMoreBtn-" + slug).addClass("d-none");
+                $("#" + slug).addClass("postOverviewUnpub").removeClass("postOverviewPub");
+            }
+        }
+
+        function sendAjax(event) {
+            let slug = event.data['slug'];
+            console.log("/blog/" + slug + "/publish");
+            $.ajax({
+                url: "/blog/" + slug + "/publish",
+                type: "GET",
+                data: {},
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    var slug = data['slug'];
+                    var postState = states.get(slug);
+                    states.set(slug, !postState);
+                    handlePublishDecoration(slug, !postState);
+                },
+                fail: function () { },
+            });
+        }
+    });
+</script>
+{% include './snippets/unpublishedModal.html' %}
 {% endblock content %}

@@ -129,6 +129,22 @@ body {
 
 #success_msg { display: none; }
 
+.commetnsOnAccount {
+    background-color: rgba(40, 40, 100, 0.3);
+    border: 1px solid rgba(0, 0, 150, 0.3);
+    border-radius: 25px;
+    box-shadow: 3px 3px 4px black;
+    
+}
+
+#resetDoneP {
+    text-align: justify;
+}
+
+#pwdList {
+    font-size: 0.8rem;
+}
+
 /* ? FOOTER */
 footer {
     opacity: 75%;
@@ -258,16 +274,6 @@ footer:hover {
     }
 }
 
-#unappCommBody {
-    border: 1px dashed rgba(139, 0, 0, 0.5);
-    border-radius: 25px;
-}
-
-#appCommBody {
-    border: 1px dashed rgba(0, 100, 0, 0.5);
-    border-radius: 25px;
-}
-
 .postOverviewPub {
     background-color: rgba(20, 20, 30, 0.8);
     border-radius: 25px;
@@ -309,10 +315,24 @@ textarea {
     color: white;
 }
 
-.mustAuthenticate {
-    background-color: rgba(50, 0, 0, 0.8);
-    border-radius: 25px;
-    box-shadow: 3px 3px 5px black;
+#mustAuthenticate {
+    max-width: 350px;
+    background-color: rgba(50, 0, 0, 0.7);
+    padding: 3%;
+    border-radius: 15px;
+    margin: auto;
+    color: #fff;
+    box-shadow: 3px 3px 4px black;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#mustAuthenticate h2 {
+    color: red;
+    text-shadow: 1px 1px 5px darkblue;
+}
+
+#mustAuthenticate:hover {
+    background-color: rgba(50, 0, 0, 0.9);
 }
 
 @media (max-width: 768px) {

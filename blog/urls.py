@@ -7,7 +7,7 @@ from blog.views import (
     delete_post_view,    
     PostLikesView,
     PostCommentView,
-    DeleteCommentView,
+    delete_comment_view,
     BlogIndexView,
     comment_likes_view,
 )
@@ -25,6 +25,6 @@ urlpatterns = [
     path('<int:post_id>/like', PostLikesView, name='postlike'),
     # ! Comments
     path('<slug>/comment', PostCommentView, name='comment'),
-    path('deletecomment', DeleteCommentView, name="deletecomment"),
-    path('likecomment', comment_likes_view, name='commentlike'),
+    path('deletecomment/', delete_comment_view, name="deletecomment"),
+    path('likecomment/', comment_likes_view, name='commentlike'),
 ]

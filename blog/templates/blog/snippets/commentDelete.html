@@ -21,7 +21,10 @@
                     $("#detailBlogComment-{{ comment.id }}").remove();
                     $("#commentCount").html($(".comment").length + " comments");
                 },
-                fail: function () { }
+                fail: function () { },
+                error: function () {
+                    console.log("ERROR");
+                }
             });
         });
     }

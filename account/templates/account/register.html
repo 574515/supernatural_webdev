@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
+
 <head>
     <title>{% block title %}Register{% endblock %}</title>
 </head>
@@ -8,34 +9,34 @@
 <div class="container-fluid loginregister-dark mt-4">
     <form method="post" action="">
         {% csrf_token %}
-            <div class="form-group">
-                <img src="{% static '/assets/registerCas.gif' %}" class="img-responsive" alt="Gif" id="gif">
-            </div>
-            <div class="form-group">
-                <h3>Register</h3>
-            </div>
-            <div class="form-group">                
-                <input type="text" name="first_name" class="form-control" placeholder="First Name" autofocus>
-            </div>
-            <div class="form-group">                
-                <input type="text" name="last_name" class="form-control" placeholder="Last Name">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="email" name="email" placeholder="Email">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="text" name="username" placeholder="Username">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" name="password1" placeholder="Password">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" name="password2" placeholder="Repeat password">
-            </div>
-            <div class="form-group bttns">
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
-                <a class="login mt-3" href="{% url 'account:login' %}">Already have an account? Log in!</a>
-            </div>
+        <div class="form-group">
+            <img src="{% static '/assets/registerCas.gif' %}" class="img-fluid rounded mb-3" alt="Gif" id="gif">
+        </div>
+        <div class="form-group">
+            <h3>Register</h3>
+        </div>
+        <div class="form-group">
+            <input type="text" name="first_name" class="form-control" placeholder="First Name" maxlength="60" autofocus>
+        </div>
+        <div class="form-group">
+            <input type="text" name="last_name" class="form-control" placeholder="Last Name" maxlength="60">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email" maxlength="60">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="username" placeholder="Username" maxlength="16">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password1" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password2" placeholder="Repeat password">
+        </div>
+        <div class="form-group bttns">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+            <a class="login mt-3" href="{% url 'account:login' %}">Already have an account? Log in!</a>
+        </div>
     </form>
 </div>
 {% endblock content %}

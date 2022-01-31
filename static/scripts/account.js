@@ -17,58 +17,6 @@ $(document).ready(function() {
         }
     });
 
-    $("#toggleApproved").click(function () {
-        const div = document.querySelector('#approvedCommentsDiv');        
-        if(div.classList.contains('d-none')) {
-            $("#approvedCommentsDiv").removeClass("d-none").addClass("d-block")
-            $(this).addClass("active");
-        }
-        else {
-            $("#approvedCommentsDiv").removeClass("d-block").addClass("d-none")
-            $(this).removeClass("active");
-        }
-    });
-
-    $("#toggleUnapproved").click(function () {
-        const div = document.querySelector('#unapprovedCommentsDiv');        
-        if(div.classList.contains('d-none')) {
-            $("#unapprovedCommentsDiv").removeClass("d-none").addClass("d-block")
-            $(this).addClass("active");
-        }
-        else {
-            $("#unapprovedCommentsDiv").removeClass("d-block").addClass("d-none")
-            $(this).removeClass("active");
-        }
-    });
-
-
-
-    $("#togglePublished").click(function () {
-        const div = document.querySelector('#publishedPostsDiv');        
-        if(div.classList.contains('d-none')) {
-            $("#publishedPostsDiv").removeClass("d-none").addClass("d-block")
-            $(this).addClass("active");
-        }
-        else {
-            $("#publishedPostsDiv").removeClass("d-block").addClass("d-none")
-            $(this).removeClass("active");
-        }
-    });
-
-    $("#toggleUnpublished").click(function () {
-        const div = document.querySelector('#unpublishedPostsDiv');        
-        if(div.classList.contains('d-none')) {
-            $("#unpublishedPostsDiv").removeClass("d-none").addClass("d-block")
-            $(this).addClass("active");
-        }
-        else {
-            $("#unpublishedPostsDiv").removeClass("d-block").addClass("d-none")
-            $(this).removeClass("active");
-        }
-    });
-
-
-
     $("#togglePosts").click(function () {
         const div = document.querySelector('#accPostsDiv');        
         if(div.classList.contains('d-none')) {
