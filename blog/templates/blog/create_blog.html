@@ -1,57 +1,32 @@
 {% extends 'main/base.html' %}
-
-
+{% load static %}
 {% block content %}
-
-<style type="text/css">
-  .create-form {
-	    width: 100%;
-	    max-width: 100%;
-	    padding: 15px;
-	    margin: auto;
-  	}
-
-  	.submit-button{
-  		max-width: 200px;
-  	}
-</style>
-
-<div class="container">
-	<div class="row">
-		<div class="col-lg-7 offset-lg-1">
-			<form class="create-form" method="post" enctype="multipart/form-data">{% csrf_token %}
-
-				<!-- title -->
-				<div class="form-group">
-					<label for="id_title">Title</label>
-					<input class="form-control" type="text" name="title" id="id_title" placeholder="Title" maxlength="50" required autofocus>
-				</div>
-
-                <!-- Description -->
-                <div class="form-grup">
-                    <label for="description">Description</label>
+<div class="container-fluid addedit-dark mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post" class="w-100 h-100" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <img src="{% static '/assets/createAmaraChuck.gif' %}" class="img-fluid rounded mb-3" alt="Gif" id="create_gif">
+                </div>
+                <div class="form-group my-3">
+                    <h3>Create new post</h3>
+                </div>
+                <div class="form-group my-3">
+                    <input class="form-control" type="text" name="title" id="id_title" placeholder="Title" maxlength="50" required autofocus>
+                </div>
+                <div class="form-group my-3">
                     <textarea class="form-control" rows="3" type="text" name="description" id="id_description" placeholder="Short description" maxlength="300" required></textarea>
                 </div>
-				<!-- Body -->
-				<div class="form-group">
-					<label for="id_body">Content</label>
-					<textarea class="form-control" rows="10" type="text" name="body" id="id_body" placeholder="This blog is about..." maxlength="5000" required></textarea>
-				</div>
-
-				<!-- Image -->
-				<div class="form-group">
-					<label for="id_image">Image</label>
-					<input  type="file" name="image" id="id_image" accept="image/*" required>
-				</div>
-
-				<!-- Submit btn -->
-				<button class="submit-button btn btn-lg btn-primary btn-block" type="submit">POST</button>
-			</form>	
-		</div>
-	</div>
+                <div class="form-group my-3">
+                    <textarea class="form-control" rows="10" type="text" name="body" id="id_body" placeholder="This blog is about..." maxlength="5000" required></textarea>
+                </div>
+                <div class="form-group my-3 text-start">
+                    <input class="form-control" type="file" name="image" id="id_image" accept="image/*" required>
+                </div>
+                <button class="btn btn-outline-success btn-block px-5 py-2 m-4" type="submit">Create post</button>
+            </form>
+        </div>
+    </div>
 </div>
-
-
-
-
 {% endblock content %}

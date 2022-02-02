@@ -15,7 +15,7 @@ body {
 	text-align: center;
 }
 
-.col-1:hover {
+#snlogo:hover {
 	animation: glow 1s ease-in-out infinite alternate;
 }
 
@@ -359,4 +359,37 @@ textarea {
 
 .sbopt {
 	background-color: rgba(30, 30, 100, 1);
+}
+
+
+
+
+#create_gif {
+    width: 50vw;
+    box-shadow: 0 0 5px black;
+}
+
+.addedit-dark form {
+    max-width: 75vw;
+    background-color: #1e2833;
+    padding: 3%;
+    border-radius: 15px;
+    margin: auto;
+    color: #fff;
+    box-shadow: 3px 3px 4px black;
+    opacity: 85%;
+    font-family: 'Times New Roman', Times, serif;
+}
+  
+.addedit-dark form:hover {
+    opacity: 1;
+}
+  
+.addedit-dark form .form-control, #id_image {
+    background: none;
+    border: 1px solid #434a52;
+    border-radius: 5px;
+    box-shadow: none;
+    outline: none;
+    color: inherit;
 }

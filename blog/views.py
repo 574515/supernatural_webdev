@@ -41,13 +41,13 @@ def BlogIndexView(request):
 	if user_has_posts:
 		unpub_withauth = BlogPost.objects.filter(author=user).all()
 
-	# if user.is_superuser:
-	# 	context['posts'] = all_posts
-	# elif user.is_authenticated and user_has_posts:
-	# 	context['posts'] = unpub_withauth
-	# else:
-	# 	context['posts'] = pub_posts
-	context['posts'] = all_posts
+	if user.is_superuser:
+		context['posts'] = all_posts
+	elif user.is_authenticated and user_has_posts:
+		context['posts'] = unpub_withauth
+	else:
+		context['posts'] = pub_posts
+	#context['posts'] = all_posts
 	context['unpub_posts'] = unpub_posts
 	context['pub_posts'] = pub_posts
 	context['comments'] = comments
@@ -62,7 +62,7 @@ def CreateBlogView(request):
 	
 	user = request.user
 	if not user.is_authenticated:
-		return redirect('must_authenticate')
+		return redirect('account:must_authenticate')
 		
 	form = CreateBlogPostForm(request.POST or None, request.FILES or None)
 	if form.is_valid():
@@ -170,9 +170,21 @@ def PublishPostView(request, slug):
 def delete_post_view(request, slug):
 	if not request.user.is_authenticated or not request.user.is_superuser:
 		return redirect('must_authenticate')
-	post = BlogPost.objects.get(slug=slug)
-	post.delete()
-	return HttpResponseRedirect(reverse('index'))
+	try:
+		post = get_object_or_404(BlogPost, slug=slug)        
+	except BlogPost.DoesNotExist:
+		return HttpResponse('Product not found', status=404)
+	except Exception:
+		return HttpResponse('Internal Error', status=500)
+
+	if request.method == 'GET':
+		post.delete()
+		return HttpResponse(json.dumps({"good": True, "slug": slug, "user": request.user.username, "author": post.author.username}), content_type="application/json")
+	else:
+		post.delete()
+		return HttpResponseRedirect(reverse('index'))
+
+			
 
 
 # ! TEST

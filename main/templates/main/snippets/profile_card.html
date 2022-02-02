@@ -9,11 +9,43 @@
         <div class="col-md-7 mt-1 text-muted">{{ request.user.username }}</div>
         <div class="col-md-5 mt-1">Last login:</div>
         <div class="col-md-7 mt-1 text-muted">{{ request.user.last_login }}</div>
-        <div class="col-md-6 mt-3 mb-1 text-center">
+        <div class="col-md-6 mt-4 text-center">
             <a href="{% url 'account:profile' request.user.id %}" class="btn btn-outline-warning btn-sm"><i class="fa-solid fa-hotdog"></i>&nbsp;&nbsp;Profile</a>
         </div>
-        <div class="col-md-6 mt-3 mb-1 text-center">
+        <div class="col-md-6 mt-4 text-center">
             <a href="{% url 'account:logout' %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-drumstick-bite"></i>&nbsp;&nbsp;Logout</a>
+        </div>
+    </div>
+    <hr>
+    <div class="row p-3">
+        <div class="col-md-8 mt-1">Number of posts:</div>
+        <div class="col-md-4 mt-1 text-muted">{{ posts.count }}</div>
+        <div class="col-md-8 mt-1">Number of comments:</div>
+        <div class="col-md-4 mt-1 text-muted">{{ comments.count }}</div>
+        <div class="col-md-12 mt-4 text-center">
+            <a class="btn btn-outline-light btn-sm w-75 my-2" href="{% url 'blog:create' %}">
+                <i class="fa-solid fa-mug-hot"></i>&nbsp;&nbsp;Make New Post
+            </a>
+        </div>
+        <div class="col-md-12 mt-1 text-center">
+            <hr>Last post:
+            <hr>
+        </div>
+        <div class="col-md-12 mt-1 text-center text-muted">
+            {% if last_post %}
+            <a href="{% url 'blog:detail' last_post.slug %}">{{ last_post.title }}</a>
+            {% else %}-{% endif %}
+        </div>
+        <div class="col-md-12 mt-1 text-center">
+            <hr>Last comment:
+            <hr>
+        </div>
+        <div class="col-md-12 mt-1 mb-3 text-center">
+            {% if last_comment %}
+            By <a href="{% url 'account:profile' last_comment.author.id %}">{{ last_comment.author }}</a>
+            on
+            <a href="{% url 'blog:detail' last_post.slug %}">{{ last_post.title }}</a>
+            {% else %}-{% endif %}
         </div>
     </div>
 </div>

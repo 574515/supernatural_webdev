@@ -20,7 +20,7 @@
 
     function yesNoDelete() {
         var title = "{{ post.title }}"
-        confirm("You are about to delete post [" + title + "].") ? $('#deleteForm').attr("action", "{% url 'blog:delete' post.slug %}") : $('#deleteForm').attr('action', '');
+        confirm("You are about to delete post [" + title + "].") ? $('#deleteForm').attr("action", "{% url 'blog:delete' post.slug %}").submit() : $('#deleteForm').attr('action', '');
     }
 
     let getState = "{{ post.published }}",

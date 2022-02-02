@@ -18,122 +18,15 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark unselectable py-1">
-            <div class="container-fluid">
-                <a href="{% url 'index' %}" class="navbar-brand"><img src="{% static 'assets/logo.png' %}" height="28"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-                    <i class="fas fa-hamburger"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navmenu">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a href="{% url 'index' %}" class="nav-item nav-link {% if navbar == 'index' %}active{% endif %}"><i class="fas fa-ghost"></i>&nbsp;&nbsp;Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'blog:blogindex' %}" class="nav-item nav-link {% if navbar == 'blogindex'%}active{% endif %}"><i class="fas fa-book-dead"></i>&nbsp;&nbsp;Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://supernatural.fandom.com/wiki/Supernatural_Wiki" class="nav-item nav-link" target="_blank">
-                                <i class="fas fa-pizza-slice"></i>&nbsp;&nbsp;Fan Wiki
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-tv"></i>&nbsp;&nbsp;Where to watch?
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li>
-                                    <a class="dropdown-item" href="https://www.amazon.com/gp/video/detail/B00117W1HQ/" target="_blank">
-                                        <i class="fa-solid fa-a text-info"></i>&nbsp;&nbsp;Amazon
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="https://www.netflix.com/title/70143825" target="_blank">
-                                        <i class="fa-solid fa-n text-danger"></i>&nbsp;&nbsp;Netflix
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="https://www.stan.com.au/watch/supernatural" target="_blank">
-                                        <i class="fa-solid fa-s text-warning"></i>&nbsp;&nbsp;Stan.
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="collapse navbar-collapse" id="navmenu">
-                    <ul class="navbar-nav ms-auto">
-                        {% if not request.user.is_authenticated %}
-                        <li class="nav-item">
-                            <a href="{% url 'account:login' %}" class="nav-item nav-link {% if navbar == 'login' %}active{% endif %}"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Log in</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'account:register' %}" class="nav-item nav-link {% if navbar == 'register' %}active{% endif %}"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Sign Up</a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-beer-mug-empty"></i>&nbsp;&nbsp;{{ request.user.username }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <a href="{% url 'account:profile' request.user.id %}" class="dropdown-item"><i class="fa-solid fa-hotdog"></i>&nbsp;&nbsp;Profile</a>
-                                <a href="{% url 'account:logout' %}" class="dropdown-item"><i class="fas fa-drumstick-bite"></i>&nbsp;&nbsp;Logout</a>
-                                {% if request.user.is_superuser %}
-                                <div class="dropdown-divider"></div>
-                                <a href="{% url 'admin:index' %}" target="_blank" class="dropdown-item">
-                                    <i class="fas fa-utensils"></i>&nbsp;&nbsp;Admin panel
-                                </a>
-                                {% endif %}
-                            </ul>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        {% include 'main/snippets/navbar.html' %}
     </header>
     <main>
         <div class="container-fluid">
             <section class=" text-light text-center text-sm-start">
                 <div class="container">
-                    <div class="d-none d-sm-block align-items-center justify-content-between">
-                        <div class="row" id="snlogo">
-                            <span class="col-1 unselectable" id="s_top">
-                                <h1 class="glow">S</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="u1_top">
-                                <h1 class="glow">U</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="p_top">
-                                <h1 class="glow">P</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="e_top">
-                                <h1 class="glow">E</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="r1_top">
-                                <h1 class="glow">R</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="n_top">
-                                <h1 class="glow">N</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="a1_top">
-                                <h1 class="glow">A</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="t_top">
-                                <h1 class="glow">T</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="u2_top">
-                                <h1 class="glow">U</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="r2_top">
-                                <h1 class="glow">R</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="a2_top">
-                                <h1 class="glow">A</h1>
-                            </span>
-                            <span class="col-1 unselectable" id="l_top">
-                                <h1 class="glow">L</h1>
-                            </span>
+                    <div class="d-none d-sm-block my-3 align-items-center justify-content-between">
+                        <div class="row" id="snlogo" style="background-color: rgba(0, 0, 0, 0.3); border-radius: 25px;">
+                            <span class="col-12 glow mx-auto unselectable" style="letter-spacing: 2rem;"></span>
                         </div>
                     </div>
                 </div>

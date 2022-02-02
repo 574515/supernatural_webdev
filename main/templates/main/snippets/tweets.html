@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-11 mx-auto text-center pb-3" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 25px;">
+        <div class="input-group mb-3 p-3 text-center">
+            <div class="col-md-12 mx-auto text-center">
+                <h3>Tweets Control</h3>
+            </div>
+
+            <div class="col-12 p-1 text-center">
+                <button class="btn btn-outline-danger btn-sm w-100" id="turnOffTweets">Hide Tweets</button>
+                <div class="input-group mt-3">
+                    <button class="btn btn-outline-warning btn-sm mx-auto mb-md-1 mb-lg-0 " type="button" id="limitTweetsBtn">Limit tweets</button>
+                    <input type="number" class="form-control mt-md-1 mt-lg-0" placeholder="1" id="limitTweets" maxlength="2" min="1" max="20">
+                </div>
+            </div>
+        </div>
+        <div id="tweets"></div>
+    </div>
+</div>
+<script>
+    $("#showTweets").addClass("d-none");
+    $("#selectPosts").addClass("col-md-6").removeClass("col-md-4");
+
+    $("#tweets").html(
+        "<a class=\"twitter-timeline\" data-dnt=\"true\" data-lang=\"en\" data-height=\"100vh\" data-theme=\"dark\" data-tweet-limit=\"3\" href=\"https://twitter.com/cw_spn?ref_src=twsrc%5Etfw\" id=\"tweetsHolder\">Tweets by cw_spn</a>" +
+        "<\script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"><\/\script>"
+    );
+
+    $("#turnOffTweets").click(function () {
+        $("#tweetDiv").addClass("d-md-none").removeClass("d-md-flex");
+        $("#mainPostsIndex").removeClass("col-lg-6").addClass("col-lg-9 mx-auto");
+        $("#selectPosts").addClass("col-md-4").removeClass("col-md-6");
+        $("#showTweets").addClass("d-block").removeClass("d-none");
+    });
+
+    $("#showTweetsBtn").click(function () {
+        $("#tweetDiv").removeClass("d-md-none").addClass("d-md-flex");
+        $("#mainPostsIndex").addClass("col-lg-6").removeClass("col-lg-9 mx-auto");
+        $("#selectPosts").removeClass("col-md-4").addClass("col-md-6");
+        $("#showTweets").removeClass("d-block").addClass("d-none");
+    });
+
+    $("#limitTweets").keyup(function () {
+        $("#limitTweetsBtn").prop("disabled", this.value < 1 || this.value > 20 ? true : false);
+    });
+
+    $('#limitTweetsBtn').click(function (e) {
+        let numOfTw = $("#limitTweets").val();
+        $("#tweets").html(
+            "<a class=\"twitter-timeline\" data-dnt=\"true\" data-lang=\"en\" data-height=\"100vh\" data-theme=\"dark\" data-tweet-limit=\"" + numOfTw + "\" href=\"https://twitter.com/cw_spn?ref_src=twsrc%5Etfw\" id=\"tweetsHolder\">Tweets by cw_spn</a>" +
+            "<\script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"><\/\script>"
+        );
+    });
+</script>

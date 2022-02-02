@@ -38,9 +38,11 @@
                         {% endif %}
                     </div>
                     <script>let postStates = {}, posts = {}, getState = "False", pubState, postsPubTexts = {};</script>
-                    {% for post in posts %}
-                    {% include './snippets/account_post.html' %}
-                    {% endfor %}
+                    <div id="singlePost">
+                        {% for post in posts %}
+                        {% include './snippets/account_post.html' %}
+                        {% endfor %}
+                    </div>
                     {% else %}
                     <h3 class="text-center">{{ currUser }},
                         {% if request.user == currUser %}you have no posts.</h3>

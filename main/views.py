@@ -8,39 +8,69 @@ from django.db.models import Count
 
 
 def IndexView(request):
+	context = {}
 	comments = Comment.objects.all()
 	users = Account.objects.all()
 	posts = BlogPost.objects.filter(published=True).all()
-	if request.user.is_authenticated:
-		sort_by = request.POST.get('value')
-		if sort_by:
-			if request.method == "POST" and is_ajax(request):
+
+	if posts:
+		last_post = posts.order_by('pub_date')[0]
+	if comments:
+		last_comment = comments.order_by('created_at')[0]
+	
+	sort_by = request.POST.get('value')
+	if sort_by:
+		if request.method == "POST" and is_ajax(request):
+			sort_strategy = defaultOrder
+			if sort_by == '1':
 				sort_strategy = defaultOrder
-				if sort_by == '1':
-					sort_strategy = defaultOrder
-				if sort_by == '2':
-					sort_strategy = orderByCommentsDesc
-				if sort_by == '3':
-					sort_strategy = orderByCommentsAsc
-				if sort_by == '4':
-					sort_strategy = orderByLikesDesc
-				if sort_by == '5':
-					sort_strategy = orderByLikesAsc
-				posts = BlogPost.objects.filter(published=True).all()
-				sortedPosts = sort_strategy(posts)
-				seralized_posts = []
-				for post in sortedPosts:
-					seralized_posts.append(post.kakoGod())
-				seralized_posts.append(seralized_posts.__len__())
-				return JsonResponse(json.dumps(seralized_posts), status=200, safe=False)
+			if sort_by == '2':
+				sort_strategy = orderByCommentsDesc
+			if sort_by == '3':
+				sort_strategy = orderByCommentsAsc
+			if sort_by == '4':
+				sort_strategy = orderByLikesDesc
+			if sort_by == '5':
+				sort_strategy = orderByLikesAsc
+			posts = BlogPost.objects.filter(published=True).all()
+			sortedPosts = sort_strategy(posts)
+			seralized_posts = []
+			for post in sortedPosts:
+				seralized_posts.append(post.kakoGod())
+			seralized_posts.append(seralized_posts.__len__())
+			return JsonResponse(json.dumps(seralized_posts), status=200, safe=False)
+	else:
+		if posts and comments:
+			context = {
+				'navbar': 'index',
+				'posts': posts,
+				'comments': comments,
+				'users': users,
+				'last_post': last_post,
+				'last_comment': last_comment,
+			}
+		elif posts:
+			context = {
+				'navbar': 'index',
+				'posts': posts,
+				'comments': comments,
+				'users': users,
+				'last_post': last_post,
+			}
+		elif comments:
+			context = {
+				'navbar': 'index',
+				'posts': posts,
+				'comments': comments,
+				'users': users,
+				'last_comment': last_comment,
+			}
 		else:
-			return render(request, 'main/index.html', {})
-	else:		
-		context = {
-			'navbar': 'index',
-			'comments': comments,
-			'users': users,
-			'posts': posts,
+			context = {
+				'navbar': 'index',
+				'posts': posts,
+				'comments': comments,
+				'users': users,
 			}
 		return render(request, 'main/index.html', context)
 

@@ -4,24 +4,24 @@
             <img src="{{ post.image.url }}" id="postImageAccount" class="img-fluid" alt="">
         </a>
         <div class="col-12 mt-3 text-center">
-            {% if request.user == currUser or request.user.is_superuser %}
-            <form style="display: inline;" action="{% url 'blog:edit' post.slug %}" method="post">
-                {% csrf_token %}
-                <button class="btn btn-outline-warning" type="submit" name="edit" id="btnEdit">
-                    <i class="fa-regular fa-pen-to-square"></i>&nbsp;&nbsp;Edit
-                </button>
-            </form>
-            <form style="display: inline;" action="{% url 'blog:delete' post.slug %}" method="post">
-                {% csrf_token %}
-                <button class="btn btn-outline-danger" type="submit">
-                    <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Delete
-                </button>
-            </form>
-            {% if request.user.is_superuser %}
-            <button class="btn btn-outline-success" type="submit" id="pubUnpubPost-{{ post.id }}">
-                <i class="fa-regular fa-lemon"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan-{{ post.id }}">Publish</span>
-            </button>
-            {% endif %}
+            <div class="row">
+                {% if request.user == currUser or request.user.is_superuser %}
+                <div class="col-8 text-center">
+                    <a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-warning btn-sm">
+                        <i class="fa-regular fa-pen-to-square"></i>&nbsp;&nbsp;Edit
+                    </a>
+                    <button class="btn btn-outline-danger btn-sm" type="submit" id="delPost-{{ post.id }}">
+                        <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Delete
+                    </button>
+                </div>
+                {% if request.user.is_superuser %}
+                <div class="col-4 text-center">
+                    <button class="btn btn-outline-success btn-sm" type="submit" id="pubUnpubPost-{{ post.id }}">
+                        <i class="fa-regular fa-lemon"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan-{{ post.id }}">Publish</span>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
             {% endif %}
         </div>
     </div>
@@ -57,45 +57,76 @@
             </div>
         </div>
     </div>
+    <script>
+        posts["{{ post.slug }}"] = $("#post-{{ post.id }}");
 
-</div>
-<script>
-    posts["{{ post.slug }}"] = $("#post-{{ post.id }}");
+        getState = "{{ post.published }}";
+        getState == "True" ? pubState = true : pubState = false;
+        postStates["{{ post.slug }}"] = pubState;
+        $("#pubUnpubPostSpan-{{ post.id }}").html(postStates["{{ post.slug }}"] == true ? "Unpublish" : "Publish");
 
-    getState = "{{ post.published }}";
-    getState == "True" ? pubState = true : pubState = false;
-    postStates["{{ post.slug }}"] = pubState;
-    $("#pubUnpubPostSpan-{{ post.id }}").html(postStates["{{ post.slug }}"] == true ? "Unpublish" : "Publish");
+        if (postStates["{{ post.slug }}"] == true) {
+            posts["{{ post.slug }}"].addClass("postAccountPublished").removeClass("postAccountUnpublished");
+            $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-danger").removeClass("btn-outline-success");
+        }
+        else {
+            posts["{{ post.slug }}"].addClass("postAccountUnpublished").removeClass("postAccountPublished");
+            $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-success").removeClass("btn-outline-danger");
+        }
 
-    if (postStates["{{ post.slug }}"] == true) {
-        posts["{{ post.slug }}"].addClass("postAccountPublished").removeClass("postAccountUnpublished");
-        $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-danger").removeClass("btn-outline-success");
-    }
-    else {
-        posts["{{ post.slug }}"].addClass("postAccountUnpublished").removeClass("postAccountPublished");
-        $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-success").removeClass("btn-outline-danger");
-    }
-
-    $("#pubUnpubPost-{{ post.id }}").click(function (e) {
-        $.ajax({
-            url: "{% url 'blog:publish' post.slug %}",
-            type: "GET",
-            data: {},
-            cache: false,
-            dataType: "json",
-            success: function () {
-                postStates["{{ post.slug }}"] = !postStates["{{ post.slug }}"];
-                $("#pubUnpubPostSpan-{{ post.id }}").html(postStates["{{ post.slug }}"] == true ? "Unpublish" : "Publish");
-                if (postStates["{{ post.slug }}"] == true) {
-                    posts["{{ post.slug }}"].addClass("postAccountPublished").removeClass("postAccountUnpublished");
-                    $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-danger").removeClass("btn-outline-success");
-                }
-                else {
-                    posts["{{ post.slug }}"].addClass("postAccountUnpublished").removeClass("postAccountPublished");
-                    $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-success").removeClass("btn-outline-danger");
-                }
-            },
-            fail: function () { }
+        $("#pubUnpubPost-{{ post.id }}").click(function (e) {
+            $.ajax({
+                url: "{% url 'blog:publish' post.slug %}",
+                type: "GET",
+                data: {},
+                cache: false,
+                dataType: "json",
+                success: function () {
+                    postStates["{{ post.slug }}"] = !postStates["{{ post.slug }}"];
+                    $("#pubUnpubPostSpan-{{ post.id }}").html(postStates["{{ post.slug }}"] == true ? "Unpublish" : "Publish");
+                    if (postStates["{{ post.slug }}"] == true) {
+                        posts["{{ post.slug }}"].addClass("postAccountPublished").removeClass("postAccountUnpublished");
+                        $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-danger").removeClass("btn-outline-success");
+                    }
+                    else {
+                        posts["{{ post.slug }}"].addClass("postAccountUnpublished").removeClass("postAccountPublished");
+                        $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-success").removeClass("btn-outline-danger");
+                    }
+                },
+                fail: function () { }
+            });
         });
-    });
-</script>
+
+        $("#delPost-{{ post.id }}").click(function (e) {
+            $.ajax({
+                url: "{% url 'blog:delete' post.slug %}",
+                type: "GET",
+                data: {},
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $("#post-{{post.id}}").remove();
+                    if ($("#singlePost").children().length == 0) {
+                        if (data['user'] == data['author']) {
+                            $("#posts").html(
+                                "<h3 class=\"text-center\">" + data['user'] + ", " +
+                                "you have no posts.</h3>" +
+                                "<a class=\"btn btn-outline-light btn-sm mt-3 mb-1\" href=\"/blog/create\">" +
+                                "<i class=\"fa-solid fa-mug-hot\"></i>&nbsp;&nbsp;Make New Post" +
+                                "</a>"
+                            );
+                        } else {
+                            $("#posts").html(
+                                "<h3 class=\"text-center\">" + data['user'] + "," +
+                                "has no posts yet.</h3>" +
+                                "<a class=\"btn btn-outline-light btn-sm mt-3 mb-1\" href=\"{% url 'blog:create' %}\">" +
+                                "<i class=\"fa-solid fa-mug-hot\"></i>&nbsp;&nbsp;Make New Post" +
+                                "</a>"
+                            )
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</div>
