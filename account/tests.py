@@ -43,7 +43,6 @@ new_uniqueEmails = []
 # 			self.assertEqual(u[i].username, self.usernames[i], 'Username failed')
 # 			self.assertEqual(u[i].email, self.emails[i], 'E-mail failed')
 
-
 # 	def tearDown(self):
 # 		u.clear()
 

@@ -1,13 +1,11 @@
-from itertools import count
 import json
-from django.http import Http404, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from account.models import Account
 from blog.models import BlogPost, Comment
-from django.db.models import Count
 
 
-def IndexView(request):
+def index_view(request):
 	context = {}
 	comments = Comment.objects.all()
 	users = Account.objects.all()
@@ -36,7 +34,7 @@ def IndexView(request):
 			sortedPosts = sort_strategy(posts)
 			seralized_posts = []
 			for post in sortedPosts:
-				seralized_posts.append(post.kakoGod())
+				seralized_posts.append(post.seralizeBlogPost())
 			seralized_posts.append(seralized_posts.__len__())
 			return JsonResponse(json.dumps(seralized_posts), status=200, safe=False)
 	else:

@@ -6,23 +6,21 @@
         <div class="col-12 mt-3 text-center">
             <div class="row">
                 {% if request.user == currUser or request.user.is_superuser %}
-                <div class="col-8 text-center">
+                <div class="col-12 text-center">
                     <a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-warning btn-sm">
                         <i class="fa-regular fa-pen-to-square"></i>&nbsp;&nbsp;Edit
                     </a>
                     <button class="btn btn-outline-danger btn-sm" type="submit" id="delPost-{{ post.id }}">
                         <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Delete
                     </button>
-                </div>
-                {% if request.user.is_superuser %}
-                <div class="col-4 text-center">
-                    <button class="btn btn-outline-success btn-sm" type="submit" id="pubUnpubPost-{{ post.id }}">
+                    {% if request.user.is_superuser %}
+                    <button class="btn btn-outline-success btn-sm my-2 my-md-0" type="submit" id="pubUnpubPost-{{ post.id }}">
                         <i class="fa-regular fa-lemon"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan-{{ post.id }}">Publish</span>
                     </button>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
     <div class="col-12 col-lg-6 col-xl-6 p-2">
@@ -40,7 +38,7 @@
             <div class="col-6 text-md-end px-md-3 mt-1">
                 {{ post.likes }}&nbsp;<span style="color: red;"><i class="fa-solid fa-heart"></i></span>
                 <span class="text-white">
-                    {% if request.user.is_superuser %} {{ post.count_all_comments }} {% else %} {{ post.count_approved }} {% endif %}
+                    {{ post.count_all_comments }}
                 </span>
                 <span style="color: blue"><i class="fa-solid fa-comments"></i></span>
             </div>
@@ -51,8 +49,8 @@
         <div class="row">
             <div class="col-12 text-md-start text-center pt-3">
                 <p>
-                    Posted on: <span class="text-muted">{{ post.pub_date }}</span><br>
-                    Updated on: <span class="text-muted">{{ post.upd_date }}</span><br>
+                    Posted on: <span class="text-muted">{{ post.getPubDateFormat }}</span><br>
+                    Updated on: <span class="text-muted">{{ post.getUpdDateFormat }}</span><br>
                 </p>
             </div>
         </div>

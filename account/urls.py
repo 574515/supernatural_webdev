@@ -8,22 +8,23 @@ from django.contrib.auth.views import (
     PasswordResetView,
 )
 from account.views import (
-    AccountView,
-    LoginView,
-    LogoutView,
-    MustAuthenticateView,
-    RegisterView,
+    account_view,
+    login_view,
+    logout_view,
+    must_authenticate_view,
+    register_view,
 )
 
 
 app_name = 'account'
+
 urlpatterns = [
     # My urls
-    path('login/', LoginView, name='login'),
-    path('logout/', LogoutView, name='logout'),
-    path('must_authenticate/', MustAuthenticateView, name='must_authenticate'),
-    path('profile/<int:user_id>', AccountView, name='profile'),
-    path('register/', RegisterView, name='register'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('must_authenticate/', must_authenticate_view, name='must_authenticate'),
+    path('profile/<int:user_id>', account_view, name='profile'),
+    path('register/', register_view, name='register'),
     # Password Change Forms (import from Django Auth)
     path('password_change/done/', PasswordChangeDoneView.as_view(template_name='registration/password_change_done.html'), name='password_change_done'),
     path('password_change/', PasswordChangeView.as_view(template_name='registration/password_change.html', success_url=reverse_lazy('account:password_change_done')), name='password_change'),

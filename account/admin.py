@@ -12,4 +12,5 @@ class AccountAdmin(UserAdmin):
 	filter_horizontal = ()
 	fieldsets = ()
 
+
 admin.site.register(Account, AccountAdmin)

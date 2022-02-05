@@ -5,7 +5,7 @@ from account.models import Account
 from blog.models import BlogPost, Comment
 
 
-def AccountView(request, user_id):
+def account_view(request, user_id):
 	try:
 		user = Account.objects.get(id=user_id)
 		context = {}
@@ -43,7 +43,7 @@ def AccountView(request, user_id):
 	return render(request, 'account/account.html', context)
 
 
-def LoginView(request):
+def login_view(request):
 	context = {}
 	user = request.user
 	if user.is_authenticated:
@@ -64,18 +64,18 @@ def LoginView(request):
 	return render(request, 'account/login.html', context)
 
 
-def LogoutView(request):
+def logout_view(request):
 	logout(request)
 	return redirect('index')
 
 
-def MustAuthenticateView(request):
+def must_authenticate_view(request):
 	if request.user.is_authenticated:
 			return redirect('index')
 	return render(request, 'account/must_authenticate.html', {})
 
 
-def RegisterView(request):
+def register_view(request):
 	context = {}
 	if request.user.is_authenticated:
 		return redirect('index')

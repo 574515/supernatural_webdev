@@ -1,5 +1,5 @@
 {% if post.author == request.user or request.user.is_superuser %}
-<div class="col-4 text-end p-2">
+<div class="col-12 col-md-4 text-center p-2">
     <a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-warning">
         <i class="fa-regular fa-pen-to-square"></i>
     </a>
@@ -10,7 +10,7 @@
         </button>
     </form>
     {% if request.user.is_superuser %}
-    <button type="submit" class="btn btn-outline-success btn-sm" id="pubUnpubPost">
+    <button type="submit" class="btn btn-outline-success btn-sm my-md-2 my-xl-0" id="pubUnpubPost">
         <i class="fa-regular fa-lemon" id="lemonDetailBlog"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan">Publish</span>
     </button>
     {% endif %}
@@ -36,13 +36,13 @@
             $("#lemonDetailBlog").addClass("fa-solid").removeClass("fa-regular");
             $("#btnPostLikes-{{ post.id }}").removeClass("d-none");
             $("#postOverview").addClass("postOverviewPub").removeClass("postOverviewUnpub");
-            $("#unauthenticatedComm").removeClass("d-none");
+            $("#postComments").removeClass("d-md-none");
         } else {
             $("#pubUnpubPost").addClass("btn-outline-success").removeClass("btn-outline-danger");
             $("#lemonDetailBlog").addClass("fa-regular").removeClass("fa-solid");
             $("#btnPostLikes-{{ post.id }}").addClass("d-none");
             $("#postOverview").addClass("postOverviewUnpub").removeClass("postOverviewPub");
-            $("#unauthenticatedComm").addClass("d-none");
+            $("#postComments").addClass("d-md-none");
         }
     }
 

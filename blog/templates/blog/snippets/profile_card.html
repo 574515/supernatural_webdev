@@ -18,8 +18,8 @@
         <div class="row px-3">
             <div class="col-md-12">Number of posts: <span class="text-muted">{{ posts.count }}</span></div>
             <div class="col-md-12">Number of comments: <span class="mt-1 text-muted">{{ comments.count }}</span></div>
-            <div class="col-md-12">Last post: <span class="mt-1 text-muted">{% if last_post %}{{ last_post.pub_date }}{% else %}-{% endif %}</span></div>
-            <div class="col-md-12">Last comment: <span class="mt-1 text-muted">{% if last_comment %}{{ last_comment.created_at }}{% else %}-{% endif %}</span></div>
+            <div class="col-md-12">Last post: <span class="mt-1 text-muted">{% if last_post %}{{ last_post.getPubDateFormat }}{% else %}-{% endif %}</span></div>
+            <div class="col-md-12">Last comment: <span class="mt-1 text-muted">{% if last_comment %}{{ last_comment.getCreateDateFormat }}{% else %}-{% endif %}</span></div>
             <div class="col-12 mt-3 mb-1 mx-auto text-center">
                 {% if request.user.is_authenticated %}
                 <form style="display: inline;" action="{% url 'blog:create' %}" method="post">

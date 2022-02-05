@@ -2,16 +2,14 @@ import json
 from django.http import HttpResponseRedirect, HttpResponse
 from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from blog.models import BlogPost, Comment, LikeComment, LikePost
+from blog.models import BlogPost, Comment, LikeComment
 from account.models import Account
 from blog.forms import CommentForm, CreateBlogPostForm, UpdateBlogPostForm
 from django.urls import reverse
-
-
-from django.views.generic import View
 from django.http import JsonResponse
 
-def BlogIndexView(request):
+
+def blog_index_view(request):
 	context = {}
 	user = request.user
 	all_posts = BlogPost.objects.all()
@@ -57,7 +55,7 @@ def BlogIndexView(request):
 	return render(request, 'blog/blog_index.html', context)
 	
 
-def CreateBlogView(request):
+def create_blog_view(request):
 	context = {}
 	
 	user = request.user
@@ -73,12 +71,15 @@ def CreateBlogView(request):
 		form = CreateBlogPostForm()
 		return HttpResponseRedirect(reverse('index'))
 		
-	context['form'] = form
+	context = {
+		'form': form,
+		'navbar': 'blogindex',
+	}
 	
 	return render(request, 'blog/create_blog.html', context)
 
 
-def DetailBlogView(request, slug):
+def detail_blog_view(request, slug):
 	user = request.user
 	if not user.is_authenticated:
 		return redirect('account:must_authenticate')
@@ -89,7 +90,7 @@ def DetailBlogView(request, slug):
 		return redirect('index')
 
 	if not blog_post.published:
-		if not user.is_superuser and not blog_post.author == user:        
+		if not user.is_superuser and not blog_post.author == user:
 			return redirect('index')
 
 	comments = blog_post.comments.all()
@@ -110,19 +111,23 @@ def DetailBlogView(request, slug):
 		'comments': comments,
 		'new_comment': new_comment,
 		'comment_form': comment_form,
+		'navbar': 'blogindex',
 	}
 
 	return render(request, 'blog/detail_blog.html', context)
 
 
-def EditBlogView(request, slug):
+def edit_blog_view(request, slug):
 	context = {}
 
 	user = request.user
-	if not user.is_authenticated:
-		return redirect('must_authenticate')
-
 	blog_post = get_object_or_404(BlogPost, slug=slug)
+
+	if not user.is_authenticated:
+		return redirect('account:must_authenticate')
+	if not user == blog_post.author:
+		return redirect('index')
+
 	if request.POST:
 		form = UpdateBlogPostForm(request.POST or None, request.FILES or None, instance=blog_post)
 		if form.is_valid():
@@ -139,17 +144,20 @@ def EditBlogView(request, slug):
 			'image': blog_post.image,
 		}
 	)
-	context['form'] = form
-	context['post'] = blog_post
+	context = {
+		'form': form,
+		'post': blog_post,
+		'navbar': 'blogindex',
+	}
 	return render(request, 'blog/edit_blog.html', context)
 
 
-def PublishPostView(request, slug):
+def publish_post_view(request, slug):
 	if not request.user.is_superuser:
-		return redirect('must_authenticate')
+		return redirect('account:must_authenticate')
 
 	try:
-		post = get_object_or_404(BlogPost, slug=slug)        
+		post = get_object_or_404(BlogPost, slug=slug)
 	except BlogPost.DoesNotExist:
 		return HttpResponse('Product not found', status=404)
 	except Exception:
@@ -166,12 +174,14 @@ def PublishPostView(request, slug):
 	return HttpResponse(json.dumps({"good": True, "slug": slug}), content_type="application/json")
 
 
-
 def delete_post_view(request, slug):
-	if not request.user.is_authenticated or not request.user.is_superuser:
-		return redirect('must_authenticate')
+	if not request.user.is_authenticated:
+		return redirect('account:must_authenticate')
+
 	try:
-		post = get_object_or_404(BlogPost, slug=slug)        
+		post = get_object_or_404(BlogPost, slug=slug)
+		if not request.user.is_superuser or not request.user == post.author:
+			return redirect('index')
 	except BlogPost.DoesNotExist:
 		return HttpResponse('Product not found', status=404)
 	except Exception:
@@ -184,14 +194,11 @@ def delete_post_view(request, slug):
 		post.delete()
 		return HttpResponseRedirect(reverse('index'))
 
-			
 
-
-# ! TEST
-def PostCommentView(request, slug):
+def post_comment_view(request, slug):
 	user = request.user
 	if not user.is_authenticated:
-		return redirect('must_authenticate')
+		return redirect('account:must_authenticate')
 
 	post = get_object_or_404(BlogPost, slug=slug)
 	if post and is_ajax(request):
@@ -214,15 +221,18 @@ def PostCommentView(request, slug):
 				'success_msg': "Comment posted successfully!",
 			}
 			return JsonResponse(response)
+	else:
+		return redirect('index')
 
 
 def is_ajax(request):
 	return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
-def PostLikesView(request, post_id):
+
+def post_likes_view(request, post_id):
 	if request.user.is_anonymous:
-		return redirect('must_authenticate')
-	if request.method == "GET":
+		return redirect('account:must_authenticate')
+	if request.method == "GET" and is_ajax(request):
 		user = Account.objects.get(id=request.user.id)
 		post = BlogPost.objects.get(id=post_id)
 		if user in post.userlikes.all():
@@ -233,22 +243,28 @@ def PostLikesView(request, post_id):
 			post.userlikes.add(user)
 		post.save()
 		return HttpResponse(json.dumps({"good": True}), content_type="application/json")
+	else:
+		return redirect('index')
 
 
 def delete_comment_view(request):
-	if request.method == "POST":
+	if request.user.is_anonymous:
+		return redirect('account:must_authenticate')
+	if request.method == "POST" and is_ajax(request):
 		id = request.POST.get('id', None)
 		Comment.objects.get(pk=id).delete()
 		data = {
 			'deleted': True
 		}
 		return JsonResponse(data)
+	else:
+		return redirect('index')
 
 
 def comment_likes_view(request):
 	if request.user.is_anonymous:
 		return redirect('account:must_authenticate')
-	if request.method == "POST":
+	if request.method == "POST" and is_ajax(request):
 		id = request.POST.get('id', None)
 		user = Account.objects.get(id=request.user.id)
 		comment = Comment.objects.get(id=id)

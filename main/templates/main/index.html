@@ -3,6 +3,7 @@
 <div class="col-lg-3 d-none d-lg-block">
     {% include './snippets/profile_card.html' %}
 </div>
+
 <script>
     $(document).ready(function () {
         $.ajax({
@@ -27,7 +28,7 @@
                         $("#allIndexPosts").append(
                             "<div class=\"col-12 px-3 py-2 my-2 postOverview postOverviewPub\">" +
                             "<div class=\"col-12 text-center p-2\">" +
-                            "<h2>" + post[i]['title'] + "</h2>" +
+                            "<h2><a href=\"/blog/" + post[i]['slug'] + "\" style=\"text-decoration: none;\">" + post[i]['title'] + "</a></h2>" +
                             "<div class=\"row\">" +
                             "<div class=\"col-12 col-md-6\">" +
                             "<img src=\"/media/" + post[i]['image'] + "\" alt=\"\" id=\"postImage\" class=\"mx-auto img-fluid rounded\">" +
@@ -68,9 +69,10 @@
         });
     });
 </script>
-<div class="col-12 my-3 m-md-0 col-md-9 col-lg-6 unselectable p-4" id="mainPostsIndex" style="background-color: rgba(20, 20, 20, 0.6); border-radius: 25px;">
-    <div class="row align-items-center">
-        <div class="col-12 col-md-6">
+
+<div class="col-12 my-3 my-md-0 col-md-9 col-lg-6 unselectable " id="mainPostsIndex">
+    <div class="row px-4 py-2 align-items-center indexPostsControl">
+        <div class="col-12 p-3 col-md-6">
             <h2>Blog Posts</h2>
         </div>
         <div class="col-12 col-md-4 mx-auto mx-md-none" id="selectPosts">
@@ -106,7 +108,7 @@
                                     $("#allIndexPosts").append(
                                         "<div class=\"col-12 px-3 py-2 my-2 postOverview postOverviewPub\">" +
                                         "<div class=\"col-12 text-center p-2\">" +
-                                        "<h2>" + post[i]['title'] + "</h2>" +
+                                        "<h2><a href=\"/blog/" + post[i]['slug'] + "\" style=\"text-decoration: none;\">" + post[i]['title'] + "</a></h2>" +
                                         "<div class=\"row\">" +
                                         "<div class=\"col-12 col-md-6\">" +
                                         "<img src=\"/media/" + post[i]['image'] + "\" alt=\"\" id=\"postImage\" class=\"mx-auto img-fluid rounded\">" +
@@ -152,8 +154,9 @@
             <button class="btn btn-outline-success d-none d-md-block btn-sm w-100" id="showTweetsBtn">Show Tweets</button>
         </div>
     </div>
-    <div class="row" id="allIndexPosts"></div>
+    <div class="row p-3 indexPosts" id="allIndexPosts"></div>
 </div>
+
 <div class="d-none d-md-flex col-md-3 col-lg-3 col-sm-2 unselectable text-white" id="tweetDiv">
     {% include './snippets/tweets.html' %}
 </div>

@@ -18,7 +18,7 @@
                 <div class="col-7 col-md-6 text-muted text-start mt-2">
                     <p>
                         Posted by <a href="{% url 'account:profile' post.author.id %}">{{ post.author }}</a>.<br>
-                        Posted on {{ post.pub_date }}
+                        Posted on {{ post.getPubDateFormat }}
                     </p>
                 </div>
                 <div class="col-5 col-md-6 text-end mt-2">{% include './snippets/postLikes.html' %}</div>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="col-12 col-md-5 mt-3 mt-md-0 d-md-block d-none" id="postComments">
-            <div class="commentsBody">
+            <div class="commentsBod">
                 <h2 id="commentCount">{{ post.count_all_comments }} comments</h2>
                 <div id="allComments">
                     {% for comment in comments %}

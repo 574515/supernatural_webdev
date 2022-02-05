@@ -23,7 +23,7 @@
                     <div class="col-6 text-start">
                         <p class="p-2" id="blogPostBody">{{ post.description|safe }}</p>
                         <p class="text-muted">Posted by <a href="{% url 'account:profile' post.author.id %}">{{ post.author }}</a>.<br>
-                            Posted on {{ post.pub_date }}.
+                            Posted on {{ post.getPubDateFormat }}.
                         </p>
                     </div>
                 </div>

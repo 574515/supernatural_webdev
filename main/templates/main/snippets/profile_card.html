@@ -41,7 +41,7 @@
             <hr>
         </div>
         <div class="col-md-12 mt-1 mb-3 text-center">
-            {% if last_comment %}
+            {% if posts and last_comment %}
             By <a href="{% url 'account:profile' last_comment.author.id %}">{{ last_comment.author }}</a>
             on
             <a href="{% url 'blog:detail' last_post.slug %}">{{ last_post.title }}</a>

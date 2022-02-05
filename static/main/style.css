@@ -393,3 +393,17 @@ textarea {
     outline: none;
     color: inherit;
 }
+
+.indexPosts {
+    background-color: rgba(20, 20, 20, 0.6);
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.indexPostsControl {
+    background-color: rgba(20, 20, 20, 0.6);
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
+}
