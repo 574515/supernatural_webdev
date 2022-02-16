@@ -407,3 +407,13 @@ textarea {
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
 }
+
+.dark-table-dashboard {
+    background-color: rgba(30, 30, 30, 0.7);
+    border-radius: 15px;
+}
+
+.carousel-test {
+    background-color: rgba(40, 40, 40, 0.7);
+    border-radius: 5px;
+}

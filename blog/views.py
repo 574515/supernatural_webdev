@@ -19,6 +19,15 @@ def blog_index_view(request):
 
 	if all_posts:
 		last_post = BlogPost.objects.order_by('-pub_date')[0]
+		last_posts = BlogPost.objects.order_by('pub_date')[:3]
+
+		last_one = last_posts[0]
+		last_two = last_posts[1]
+		last_three = last_posts[2]
+
+		context['last_one'] = last_one
+		context['last_two'] = last_two
+		context['last_three'] = last_three
 		context['last_post'] = last_post
 	if comments:
 		last_comment = Comment.objects.order_by('-created_at')[0]

@@ -100,3 +100,24 @@ def register_view(request):
 			'navbar': 'register'
 		}
 	return render(request, 'account/register.html', context)
+
+
+def dashboard_view(request):
+	context = {}
+	if not request.user.is_superuser:
+		return redirect('index')
+	users = Account.objects.all()
+	posts = BlogPost.objects.all()
+	context = {
+		'users': users,
+		'posts': posts,
+	}	
+	return render(request, 'account/user_list.html', context)
+
+
+def edit_user_view(request):
+	pass
+
+
+def delete_user_view(request):
+	pass

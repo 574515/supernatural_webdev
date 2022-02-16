@@ -1,0 +1,12 @@
+<td>
+    {% if user.is_admin %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger"></i>{% endif %}
+</td>
+<td>
+    {% if user.is_active %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger"></i>{% endif %}
+</td>
+<td>
+    {% if user.is_staff %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger"></i>{% endif %}
+</td>
+<td>
+    {% if user.is_superuser %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger"></i>{% endif %}
+</td>

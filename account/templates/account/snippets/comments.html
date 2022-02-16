@@ -9,7 +9,12 @@
                         <!-- |truncatechars:12 -->
                         <div class="col-8 text-start">
                             <p>Author: <span class="text-muted">{{ comment.author }}</span><br>
-                                Post: <a id="pubAuthorA" href="{% url 'blog:detail' comment.post.slug %}">{{ comment.post.title }}</a><br>
+                                Post:
+                                {% if user.is_authenticated %}
+                                <a id="pubAuthorA" href="{% url 'blog:detail' comment.post.slug %}">{{ comment.post.title }}</a><br>
+                                {% else %}
+                                <span class="text-muted">{{ comment.post.title }}</span><br>
+                                {% endif %}
                                 On: <span class="text-muted">{{ comment.getCreateDateFormat }}</span>
                             </p>
                         </div>

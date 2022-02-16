@@ -1,0 +1,83 @@
+<div class="col-md-12" id="postsTable">
+    <table class="table table-dark table-hover">
+        <thead class="text-center align-middle">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Likes</th>
+                <th scope="col">Publish Date</th>
+                <th scope="col">Published</th>
+                <th class="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-center align-middle">
+            {% for post in posts %}
+            <script>
+                $(document).ready(function () {
+                    var pubState;
+                    "{% if post.published %}"
+                    pubState = true;
+                    "{% else %}"
+                    pubState = false;
+                    "{% endif %}"
+
+                    var slug = "{{ post.slug }}";
+
+                    pubUnpubDecor();
+
+                    function pubUnpubDecor() {
+                        $("#pubUnpubPostSpan-{{ post.slug }}").html(pubState == true ? "Unpublish" : "Publish");
+                        if (pubState == true) {
+                            $("#tr-{{ post.id }}").removeClass("text-danger").addClass("text-white");
+                            $("#lemonDetailBlog-" + slug).addClass("fa-solid").removeClass("fa-regular");
+                            $("#pubUnpubPostSpan-{{ post.slug }}").html(pubState == true ? "Unpublish" : "Publish");
+                            $("#pubUnpubPost-{{ post.id }}").removeClass("btn-outline-secondary").addClass("btn-outline-light");
+                            $("#pubUnpubMark-{{ post.slug }}").addClass("fa-circle-check").addClass("text-success").removeClass("fa-circle-xmark").removeClass("text-danger");
+                        }
+                        else {
+                            $("#tr-{{ post.id }}").removeClass("text-white").addClass("text-danger");
+                            $("#lemonDetailBlog-" + slug).addClass("fa-regular").removeClass("fa-solid");
+                            $("#pubUnpubPostSpan-{{ post.slug }}").html(pubState == true ? "Unpublish" : "Publish");
+                            $("#pubUnpubPost-{{ post.id }}").addClass("btn-outline-secondary").removeClass("btn-outline-light");
+                            $("#pubUnpubMark-{{ post.slug }}").addClass("fa-circle-xmark").addClass("text-danger").removeClass("fa-circle-check").removeClass("text-success");
+                        }
+                    }
+
+                    $("#pubUnpubPost-{{ post.id }}").click(function () {
+                        var slug = "{{ post.slug }}";
+                        $.ajax({
+                            url: "/blog/" + slug + "/publish",
+                            type: "GET",
+                            data: {},
+                            cache: false,
+                            dataType: "json",
+                            success: function (data) {
+                                pubState = !pubState;
+                                pubUnpubDecor();
+                            },
+                            fail: function () { },
+                        });
+                    });
+                });
+            </script>
+            <tr id="tr-{{ post.id }}">
+                <th scope="row">{{ post.id }}</th>
+                <td><a href="{% url 'blog:detail' post.slug %}">{{ post.title }}</a></td>
+                <td><a href="{% url 'account:profile' post.author.id %}">{{ post.author }}</a></td>
+                <td>{{ post.likes }}</td>
+                <td>{{ post.pub_date }}</td>
+                <td>
+                    <i class="fa-solid " id="pubUnpubMark-{{ post.slug }}"></i>
+                </td>
+                <td>
+                    <button class="btn btn-outline-{% if post.published %}secondary{% else %}light{% endif %} btn-sm my-2 my-md-0" id="pubUnpubPost-{{ post.id }}">
+                        <i class="fa-regular fa-lemon" id="lemonDetailBlog-{{ post.slug }}"></i>&nbsp;&nbsp;<span id="pubUnpubPostSpan-{{ post.slug }}">Publish</span>
+                    </button>
+                    <a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-warning btn-sm">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -28,7 +28,11 @@
                         $("#allIndexPosts").append(
                             "<div class=\"col-12 px-3 py-2 my-2 postOverview postOverviewPub\">" +
                             "<div class=\"col-12 text-center p-2\">" +
+                            "{% if user.is_authenticated %}" +
                             "<h2><a href=\"/blog/" + post[i]['slug'] + "\" style=\"text-decoration: none;\">" + post[i]['title'] + "</a></h2>" +
+                            "{% else %}" +
+                            "<h2>" + post[i]['title'] + "</h2>" +
+                            "{% endif %}" +
                             "<div class=\"row\">" +
                             "<div class=\"col-12 col-md-6\">" +
                             "<img src=\"/media/" + post[i]['image'] + "\" alt=\"\" id=\"postImage\" class=\"mx-auto img-fluid rounded\">" +
@@ -42,7 +46,7 @@
                             "</div>" +
                             "</div>" +
                             "<div class=\"row col-12 col-md-6 align-items-center\">" +
-                            "<div class=\"col-12 col-md-7 text-center ps-4 ps-md-3 py-2 my-2\">" +
+                            "<div class=\"col-12 {% if user.is_authenticated %}col-md-7{% else %}col-md-12{% endif %} text-center ps-4 ps-md-3 py-2 my-2\">" +
                             "<button class=\"btn btn-outline-danger btn-sm disabled\">" +
                             "<i class=\"fa-solid fa-heart\"></i>&nbsp;&nbsp; " + post[i]['likes'] +
                             "</button>&nbsp;" +
@@ -50,10 +54,13 @@
                             "<i class=\"fa-solid fa-comments\"></i>&nbsp;&nbsp; " + post[i]['comments'] +
                             "</button>" +
                             "</div>" +
+                            "{% if user.is_authenticated %}" +
                             "<div class=\"col-12 col-md-5 text-center ps-4 ps-md-3 py-2 my-2\">" +
                             "<a href=\"/blog/" + post[i]['slug'] + "\" class=\" w-100 btn btn-outline-info btn-sm\">" +
                             "<i class=\"fa-solid fa-book-open\"></i>&nbsp;&nbsp;Read" +
                             "</a>" +
+                            "</div>" +
+                            "{% endif %}" +
                             "</div>" +
                             "</div>" +
                             "</div>" +
@@ -108,7 +115,11 @@
                                     $("#allIndexPosts").append(
                                         "<div class=\"col-12 px-3 py-2 my-2 postOverview postOverviewPub\">" +
                                         "<div class=\"col-12 text-center p-2\">" +
+                                        "{% if user.is_authenticated %}" +
                                         "<h2><a href=\"/blog/" + post[i]['slug'] + "\" style=\"text-decoration: none;\">" + post[i]['title'] + "</a></h2>" +
+                                        "{% else %}" +
+                                        "<h2>" + post[i]['title'] + "</h2>" +
+                                        "{% endif %}" +
                                         "<div class=\"row\">" +
                                         "<div class=\"col-12 col-md-6\">" +
                                         "<img src=\"/media/" + post[i]['image'] + "\" alt=\"\" id=\"postImage\" class=\"mx-auto img-fluid rounded\">" +
@@ -122,7 +133,7 @@
                                         "</div>" +
                                         "</div>" +
                                         "<div class=\"row col-12 col-md-6 align-items-center\">" +
-                                        "<div class=\"col-12 col-md-7 text-center ps-4 ps-md-3 py-2 my-2\">" +
+                                        "<div class=\"col-12 {% if user.is_authenticated %}col-md-7{% else %}col-md-12{% endif %} text-center ps-4 ps-md-3 py-2 my-2\">" +
                                         "<button class=\"btn btn-outline-danger btn-sm disabled\">" +
                                         "<i class=\"fa-solid fa-heart\"></i>&nbsp;&nbsp; " + post[i]['likes'] +
                                         "</button>&nbsp;" +
@@ -130,11 +141,13 @@
                                         "<i class=\"fa-solid fa-comments\"></i>&nbsp;&nbsp; " + post[i]['comments'] +
                                         "</button>" +
                                         "</div>" +
+                                        "{% if user.is_authenticated %}" +
                                         "<div class=\"col-12 col-md-5 text-center ps-4 ps-md-3 py-2 my-2\">" +
                                         "<a href=\"/blog/" + post[i]['slug'] + "\" class=\" w-100 btn btn-outline-info btn-sm\">" +
                                         "<i class=\"fa-solid fa-book-open\"></i>&nbsp;&nbsp;Read" +
                                         "</a>" +
                                         "</div>" +
+                                        "{% endif %}" +
                                         "</div>" +
                                         "</div>" +
                                         "</div>"
